@@ -12,7 +12,9 @@ public class CartServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         PrintWriter out = resp.getWriter();
         out.println("<head><title>Корзина</title></head>");
+        out.println("<body>");
         getServletContext().getRequestDispatcher("/topmenu.html").include(req, resp);
         out.println("<h1 align=\"center\">Корзина</h1>");
+        out.println("</body>");
     }
 }

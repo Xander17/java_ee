@@ -12,7 +12,9 @@ public class ErrorServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         PrintWriter out = resp.getWriter();
         out.println("<head><title>Ошибка</title></head>");
+        out.println("<body>");
         getServletContext().getRequestDispatcher("/topmenu.html").include(req, resp);
         out.println("<h1 align=\"center\">Упс.. где-то ошибка</h1><p align=\"center\">Страница не найдена</p>");
+        out.println("</body>");
     }
 }

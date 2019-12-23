@@ -12,7 +12,9 @@ public class MainPageServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         PrintWriter out = resp.getWriter();
         out.println("<head><title>Главная страница</title></head>");
+        out.println("<body>");
         getServletContext().getRequestDispatcher("/topmenu.html").include(req, resp);
         out.println("<h1 align=\"center\">Главная страница</h1>");
+        out.println("</body>");
     }
 }

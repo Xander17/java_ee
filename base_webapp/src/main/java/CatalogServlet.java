@@ -12,7 +12,9 @@ public class CatalogServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         PrintWriter out = resp.getWriter();
         out.println("<head><title>Каталог</title></head>");
+        out.println("<body>");
         getServletContext().getRequestDispatcher("/topmenu.html").include(req, resp);
         out.println("<h1 align=\"center\">Каталог</h1>");
+        out.println("</body>");
     }
 }
