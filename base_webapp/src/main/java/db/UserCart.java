@@ -1,7 +1,6 @@
 package db;
 
 import javax.servlet.http.HttpSession;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -9,18 +8,19 @@ public class UserCart {
     private Map<Integer, Integer> cart;
     private HttpSession session;
 
+    private UserCart() {
+        cart = new TreeMap<>();
+    }
+
     public static UserCart getSessionCart(HttpSession session) {
         UserCart cart = (UserCart) session.getAttribute("cart");
         if (cart == null) {
             cart = new UserCart();
             cart.session = session;
+            session.setAttribute("cart", cart);
             cart.updateSession();
         }
         return cart;
-    }
-
-    private UserCart() {
-        cart = new TreeMap<>();
     }
 
     public void add(int id, int quantity) {
@@ -45,13 +45,12 @@ public class UserCart {
         return cart;
     }
 
-    public void clear(){
+    public void clear() {
         cart.clear();
         updateSession();
     }
 
     private void updateSession() {
-        session.setAttribute("cart", this);
         session.setAttribute("cartSize", cart.size());
     }
 }
