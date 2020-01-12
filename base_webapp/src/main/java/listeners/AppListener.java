@@ -1,5 +1,6 @@
 package listeners;
 
+import db.Product;
 import db.ProductRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,6 +29,18 @@ public class AppListener implements ServletContextListener {
             ProductRepository productRepository = new ProductRepository(connection);
             servletContext.setAttribute("connection", connection);
             servletContext.setAttribute("productRepository", productRepository);
+
+            if (productRepository.findAll().size() == 0) {
+                productRepository.insert(new Product(-1, "Product1", "Desc1", 10.66));
+                productRepository.insert(new Product(-1, "Product2", "Desc2", 102.));
+                productRepository.insert(new Product(-1, "Product3", "Desc3", 1030.));
+                productRepository.insert(new Product(-1, "Product4", "Desc4", 199.99));
+                productRepository.insert(new Product(-1, "Product5", "Desc5", 55.50));
+                productRepository.insert(new Product(-1, "Product6", "Desc6", 0.4));
+                productRepository.insert(new Product(-1, "Product7", "Desc7", 1800.));
+                productRepository.insert(new Product(-1, "Product8", "Desc8", 99.));
+                productRepository.insert(new Product(-1, "Product9", "Desc9", 15.));
+            }
         } catch (SQLException e) {
             logger.error("", e);
         }

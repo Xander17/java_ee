@@ -10,7 +10,7 @@ public class Pages {
     private Pages() {
     }
 
-    public static void defaultPage(ServletContext servletContext, HttpServletRequest req, HttpServletResponse resp, String title, String contentJSP) throws ServletException, IOException {
+    public static void defaultPageForward(ServletContext servletContext, HttpServletRequest req, HttpServletResponse resp, String title, String contentJSP) throws ServletException, IOException {
         req.setAttribute("content", contentJSP);
         req.setAttribute("pageTitle", title);
         servletContext.getRequestDispatcher("/default_page.jsp").forward(req, resp);

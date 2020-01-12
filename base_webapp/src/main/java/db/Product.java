@@ -1,10 +1,15 @@
 package db;
 
+import java.util.Objects;
+
 public class Product {
     private int id;
     private String name;
     private String description;
     private Double price;
+
+    public Product() {
+    }
 
     public Product(int id, String name, String description, Double price) {
         this.id = id;
@@ -43,5 +48,18 @@ public class Product {
 
     public void setPrice(double price) {
         this.price = price;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Product product = (Product) o;
+        return id == product.id;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }

@@ -7,10 +7,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@WebServlet(name = "Cart page", urlPatterns = "/cart")
-public class CartServlet extends HttpServlet {
+@WebServlet(name = "About page", urlPatterns = "/about")
+public class AboutServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        Pages.defaultPage(getServletContext(), req, resp, "Корзина", "content/cart.jsp");
+        Pages.defaultPageForward(getServletContext(), req, resp, "О компании", "content/about.jsp");
     }
 }

@@ -11,12 +11,19 @@ public class ProductRepository {
         this.connection = connection;
         createTableIfNotExists(connection);
     }
+
     public void insert(Product product) throws SQLException {
         try (PreparedStatement statement = connection.prepareStatement(
                 "insert into products(`name`, `description`, `price`) values (?, ?, ?);")) {
-            statement.setString(1, product.getName());
-            statement.setString(2, product.getDescription());
-            statement.setDouble(3, product.getPrice());
+            String name = product.getName();
+            if (name == null || name.isEmpty()) return;
+            String desc = product.getDescription();
+            if (desc == null || desc.isEmpty()) return;
+            Double price = product.getPrice();
+            if (price == null || price <= 0) return;
+            statement.setString(1, name);
+            statement.setString(2, desc);
+            statement.setDouble(3, price);
             statement.execute();
         }
     }

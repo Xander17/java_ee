@@ -11,6 +11,6 @@ import java.io.IOException;
 public class MainPageServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        Pages.defaultPage(getServletContext(), req, resp, "Главная страница", "content/index.jsp");
+        Pages.defaultPageForward(getServletContext(), req, resp, "Главная страница", "content/index.jsp");
     }
 }

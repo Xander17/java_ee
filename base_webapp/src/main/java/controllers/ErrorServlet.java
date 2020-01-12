@@ -11,6 +11,6 @@ import java.io.IOException;
 public class ErrorServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        Pages.defaultPage(getServletContext(), req, resp, "Ошибка", "content/error.jsp");
+        Pages.defaultPageForward(getServletContext(), req, resp, "Ошибка", "content/error.jsp");
     }
 }
