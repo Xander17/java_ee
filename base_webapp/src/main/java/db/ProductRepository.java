@@ -1,5 +1,6 @@
 package db;
 
+import java.nio.charset.StandardCharsets;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,8 +22,8 @@ public class ProductRepository {
             if (desc == null || desc.isEmpty()) return;
             Double price = product.getPrice();
             if (price == null || price <= 0) return;
-            statement.setString(1, name);
-            statement.setString(2, desc);
+            statement.setString(1, encodeUTF(name));
+            statement.setString(2, encodeUTF(desc));
             statement.setDouble(3, price);
             statement.execute();
         }
@@ -80,5 +81,9 @@ public class ProductRepository {
                     "`price` decimal(19, 2) \n" +
                     ");");
         }
+    }
+
+    private String encodeUTF(String s) {
+        return new String(s.getBytes(StandardCharsets.ISO_8859_1), StandardCharsets.UTF_8);
     }
 }
