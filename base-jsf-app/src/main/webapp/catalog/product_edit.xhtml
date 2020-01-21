@@ -14,31 +14,31 @@
 
     <div align="center">
         <h:form id="editForm">
-            <table>
+            <table class="productview-table">
                 <ui:fragment rendered="#{catalogController.product.id!=null}">
                     <tr>
-                        <td><h:outputLabel value="Артикул" for="id"/></td>
-                        <td><h:outputText id="id" value="#{catalogController.product.id}">
+                        <td class="col-label"><h:outputLabel value="Артикул" for="id"/></td>
+                        <td class="col-value"><h:outputText id="id" value="#{catalogController.product.id}">
                             <f:convertNumber minIntegerDigits="8" pattern="########"/>
                         </h:outputText></td>
                     </tr>
                 </ui:fragment>
                 <tr>
-                    <td><h:outputLabel value="Название товара" for="name"/></td>
-                    <td>
+                    <td class="col-label"><h:outputLabel value="Название товара" for="name"/></td>
+                    <td class="col-value">
                     <h:inputText value="#{catalogController.product.name}" id="name"
                                  placeholder="Введите название" required="true"
                                  requiredMessage="Требуется ввести название"/></td>
                 </tr>
                 <tr>
-                    <td><h:outputLabel value="Описание товара" for="description"/></td>
-                    <td>
+                    <td class="col-label"><h:outputLabel value="Описание товара" for="description"/></td>
+                    <td class="col-value">
                     <h:inputText value="#{catalogController.product.description}" id="description"
                                  placeholder="Введите описание"/></td>
                 </tr>
                 <tr>
-                    <td><h:outputLabel value="Цена" for="price"/></td>
-                    <td><h:inputText p:type="number" value="#{catalogController.product.price}" id="price"
+                    <td class="col-label"><h:outputLabel value="Цена" for="price"/></td>
+                    <td class="col-value"><h:inputText p:type="number" value="#{catalogController.product.price}" id="price"
                                      placeholder="Введите цену" required="true"
                                      requiredMessage="Требуется ввести цену"
                                      validatorMessage="Цена должна быть больше нуля" converter="javax.faces.Double">

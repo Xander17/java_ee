@@ -1,4 +1,4 @@
-package db;
+package ru.geekbrains.db;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;

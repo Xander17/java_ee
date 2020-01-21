@@ -1,4 +1,4 @@
-package db;
+package ru.geekbrains.db;
 
 import java.util.Objects;
 

@@ -1,0 +1,96 @@
+@import url('https://fonts.googleapis.com/css?family=Exo+2&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background-color: #f7f7f7;
+    font-family: 'Exo 2', sans-serif;
+}
+
+h1 {
+    margin: 20px;
+}
+
+.products-table {
+    width: 80%;
+    border-spacing: 0;
+}
+
+.products-table td {
+    border: solid dimgrey;
+    border-width: 0 0 2px 0;
+    padding: 5px;
+}
+
+.products-table th {
+    text-align: center;
+    font-weight: bold;
+    border: solid dimgrey;
+    border-width: 0 0 4px 0;
+}
+
+.products-table tfoot td {
+    text-align: center;
+    font-weight: bold;
+    border-width: 0;
+}
+
+td.col-id, td.col-price, td.col-qty, td.col-cart, td.col-edit, td.col-sum {
+    text-align: center;
+}
+
+.col-id, .col-cart, .col-qty {
+    width: 1%;
+    white-space: nowrap;
+}
+
+.col-price, .col-sum {
+    width: 10%;
+    white-space: nowrap;
+}
+
+.col-desc, .col-name {
+    width: 30%;
+}
+
+.productview-table {
+    width: 40%;
+}
+
+.quantity-input {
+    width: 50px;
+}
+.products-table .quantity-input {
+    text-align: center;
+}
+
+.col-label, .col-value {
+    width: 50%;
+}
+
+.col-value {
+    text-align: right;
+}
+
+.topmenu {
+    margin: 20px 0;
+}
+
+.topmenu a {
+    padding: 20px;
+    font-weight: bold;
+    font-style: inherit;
+    color: dimgrey;
+    text-decoration: none;
+}
+
+.topmenu a:visited {
+    color: dimgrey;
+}
+
+.topmenu a:hover {
+    color: black;
+}

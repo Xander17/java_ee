@@ -1,4 +1,4 @@
-package db;
+package ru.geekbrains.db;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.SessionScoped;
@@ -10,10 +10,10 @@ import java.util.TreeMap;
 @Named
 @SessionScoped
 public class UserCart implements Serializable {
-    private Map<Product, Integer> cart;
+    private TreeMap<Product, Integer> cart;
 
     @PostConstruct
-    public void init(){
+    public void init() {
         cart = new TreeMap<>();
     }
 
@@ -22,9 +22,8 @@ public class UserCart implements Serializable {
         cart.put(product, cart.getOrDefault(product, 0) + quantity);
     }
 
-    public void set(Product product, int quantity) {
-        if (quantity < 0) return;
-        if (quantity == 0) remove(product);
+    public void set(Product product, Integer quantity) {
+        if (quantity <= 0) remove(product);
         else cart.put(product, quantity);
     }
 

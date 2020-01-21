@@ -3,48 +3,50 @@
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:f="http://xmlns.jcp.org/jsf/core" xmlns:p="http://xmlns.jcp.org/jsf/passthrough">
 <ui:include src="/WEB-INF/header.xhtml">
-    <ui:param name="pageTitle" value="Товар"/>
+    <ui:param name="pageTitle" value="#{catalogController.quantityProduct.name}"/>
 </ui:include>
 <h:body>
-    <h1 align="center"><h:outputText value="#{catalogController.product.id}"/></h1>
-    <table align="center">
-        <tr>
-            <td><h:outputLabel value="Артикул" for="id"/></td>
-            <td><h:outputText id="id" value="#{catalogController.product.id}">
-                <f:convertNumber minIntegerDigits="8" pattern="########"/>
-            </h:outputText></td>
-        </tr>
-        <tr>
-            <td><h:outputLabel value="Название товара" for="name"/></td>
-            <td><h:outputText id="name" value="#{catalogController.product.name}"/></td>
-        </tr>
-        <tr>
-            <td><h:outputLabel value="Описание товара" for="description"/></td>
-            <td><h:outputText id="description" value="#{catalogController.product.description}"/></td>
-        </tr>
-        <tr>
-            <td><h:outputLabel value="Цена" for="price"/></td>
-            <td><h:outputText id="price" value="#{catalogController.product.price}">
-                <f:convertNumber maxFractionDigits="2" minFractionDigits="2"/>
-            </h:outputText></td>
-        </tr>
-        <tr>
-            <td colspan="2"><br/></td>
-        </tr>
-        <h:form>
+    <h1 align="center"><h:outputText value="#{catalogController.quantityProduct.name}"/></h1>
+    <div align="center">
+        <table class="productview-table">
             <tr>
-                <td><h:outputLabel for="quantity">Кол-во</h:outputLabel></td>
-                <td><h:inputText p:type="number" value="1" id="quantity" name="quantity"/></td>
+                <td class="col-label"><h:outputLabel value="Артикул" for="id"/></td>
+                <td class="col-value"><h:outputText id="id" value="#{catalogController.quantityProduct.id}">
+                    <f:convertNumber minIntegerDigits="8" pattern="########"/>
+                </h:outputText></td>
             </tr>
             <tr>
-                <td colspan="2">
-                    <h:commandButton value="Добавить в корзину"
-                                     action="#{catalogController.addToCart(catalogController.product)}"/>
-                </td>
+                <td class="col-label"><h:outputLabel value="Название товара" for="name"/></td>
+                <td class="col-value"><h:outputText id="name" value="#{catalogController.quantityProduct.name}"/></td>
             </tr>
-        </h:form>
-    </table>
-
+            <tr>
+                <td class="col-label"><h:outputLabel value="Описание товара" for="description"/></td>
+                <td class="col-value"><h:outputText id="description" value="#{catalogController.quantityProduct.description}"/></td>
+            </tr>
+            <tr>
+                <td class="col-label"><h:outputLabel value="Цена" for="price"/></td>
+                <td class="col-value"><h:outputText id="price" value="#{catalogController.quantityProduct.price}">
+                    <f:convertNumber maxFractionDigits="2" minFractionDigits="2"/>
+                </h:outputText></td>
+            </tr>
+            <tr>
+                <td colspan="2"><br/></td>
+            </tr>
+            <h:form>
+                <tr>
+                    <td class="col-label"><h:outputLabel for="quantity">Кол-во</h:outputLabel></td>
+                    <td class="col-value"><h:inputText p:type="number" value="#{catalogController.quantityProduct.quantity}" id="quantity"
+                                     name="quantity" styleClass="quantity-input"/></td>
+                </tr>
+                <tr>
+                    <td colspan="2" class="col-value">
+                        <h:commandButton value="Добавить в корзину"
+                                         action="#{catalogController.addToCart(catalogController.quantityProduct)}"/>
+                    </td>
+                </tr>
+            </h:form>
+        </table>
+    </div>
 </h:body>
 <ui:include src="/WEB-INF/footer.xhtml"/>
 </html>

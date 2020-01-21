@@ -1,9 +1,8 @@
-package controllers;
+package ru.geekbrains.controllers;
 
-import db.Product;
-import db.UserCart;
+import ru.geekbrains.db.Product;
+import ru.geekbrains.db.UserCart;
 
-import javax.annotation.PostConstruct;
 import javax.enterprise.context.SessionScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -17,8 +16,8 @@ public class CartController implements Serializable {
     @Inject
     private UserCart cart;
 
-    public UserCart getCart() {
-        return cart;
+    public Map<Product, Integer> getCart() {
+        return cart.getCart();
     }
 
     public int getCartSize() {
@@ -29,15 +28,8 @@ public class CartController implements Serializable {
         cart.remove(product);
     }
 
-    public void addToCart(Product product,int quantity){
-        cart.add(product,quantity);
-    }
-
-    public String updateQuantity(Product product) {
-        int quantity = cart.getCart().get(product);
-        if (quantity <= 0) cart.remove(product);
-        else cart.set(product, quantity);
-        return "index.xhtml?faces-redirect=true";
+    public void updateQuantity(Map.Entry<Product, Integer> entry) {
+        cart.set(entry.getKey(), entry.getValue());
     }
 
     public String order() {

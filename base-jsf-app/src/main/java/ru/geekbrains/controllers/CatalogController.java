@@ -1,8 +1,9 @@
-package controllers;
+package ru.geekbrains.controllers;
 
-import db.Product;
-import db.ProductRepository;
-import db.UserCart;
+import ru.geekbrains.db.Product;
+import ru.geekbrains.db.ProductRepository;
+import ru.geekbrains.db.QuantityProduct;
+import ru.geekbrains.db.UserCart;
 
 import javax.enterprise.context.SessionScoped;
 import javax.inject.Inject;
@@ -17,19 +18,20 @@ public class CatalogController implements Serializable {
 
     @Inject
     private ProductRepository productRepository;
-
     @Inject
     private UserCart userCart;
 
     private Product product;
+    private QuantityProduct quantityProduct;
+    private List<Product> allProducts;
+
+    public List<Product> getAllProducts() throws SQLException {
+        return productRepository.findAll();
+    }
 
     public String createProduct() {
         this.product = new Product();
         return "product_edit.xhtml?faces-redirect=true";
-    }
-
-    public List<Product> getAllProducts() throws SQLException {
-        return productRepository.findAll();
     }
 
     public String editProduct(Product product) {
@@ -55,12 +57,24 @@ public class CatalogController implements Serializable {
         this.product = product;
     }
 
+    public QuantityProduct getQuantityProduct() {
+        return quantityProduct;
+    }
+
+    public void setQuantityProduct(QuantityProduct quantityProduct) {
+        this.quantityProduct = quantityProduct;
+    }
+
     public String showProduct(Product product) {
-        this.product = product;
+        this.quantityProduct = new QuantityProduct(product, 1);
         return "product.xhtml?faces-redirect=true";
     }
 
     public void addToCart(Product product) {
         userCart.add(product, 1);
+    }
+
+    public void addToCart(QuantityProduct quantityProduct) {
+        userCart.add(quantityProduct.getProduct(), quantityProduct.getQuantity());
     }
 }

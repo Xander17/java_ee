@@ -12,38 +12,38 @@
         <h:panelGroup rendered="#{cartController.getCartSize()>0}">
             <div align="center">
                 <h:form id="cartForm">
-                    <h:dataTable value="#{cartController.cart.cart}" var="entry">
-                        <h:column>
-                            <f:facet name="header">#</f:facet>
-                        </h:column>
+                    <h:dataTable value="#{cartController.cart}" var="product" styleClass="products-table"
+                                 columnClasses="col-id,col-name,col-desc,col-price,col-qty,col-sum,col-edit">
                         <h:column>
                             <f:facet name="header">Артикул</f:facet>
-                            <h:outputLabel value="#{entry.key.id}">
+                            <h:outputLabel value="#{product.key.id}">
                                 <f:convertNumber minIntegerDigits="8" pattern="########"/>
                             </h:outputLabel>
                         </h:column>
                         <h:column>
                             <f:facet name="header">Название</f:facet>
-                            #{entry.key.name}
+                            <h:commandLink value="#{product.key.name}" action="#{catalogController.showProduct(product.key)}"/>
                         </h:column>
                         <h:column>
                             <f:facet name="header">Описание</f:facet>
-                            #{entry.key.description}
+                            #{product.key.description}
                         </h:column>
                         <h:column>
                             <f:facet name="header">Цена</f:facet>
-                            <h:outputLabel value="#{entry.key.price}">
+                            <h:outputLabel value="#{product.key.price}">
                                 <f:convertNumber minFractionDigits="2" maxFractionDigits="2"/>
                             </h:outputLabel>
                         </h:column>
                         <h:column>
                             <f:facet name="header">Количество</f:facet>
-<!--                            <h:inputText p:type="number" value="#{entry.value}"/>-->
-<!--                            <h:commandButton value="Изменить" action="#{cartController.updateQuantity(entry.key)}"/>-->
+                            <h:inputText p:type="number" value="#{product.value}" converter="javax.faces.Integer" styleClass="quantity-input"/>
+                            <h:commandButton value="Изменить" action="#{cartController.updateQuantity(product)}">
+                                <f:ajax event="click" render="cartBlock cartMenu"/>
+                            </h:commandButton>
                         </h:column>
-                        <h:column>
+                        <h:column id="tableSum">
                             <f:facet name="header">Сумма</f:facet>
-                            <h:outputLabel value="#{entry.key.price*entry.value}">
+                            <h:outputLabel value="#{product.key.price*product.value}">
                                 <f:convertNumber minFractionDigits="2" maxFractionDigits="2"/>
                             </h:outputLabel>
                             <f:facet name="footer">
@@ -53,8 +53,8 @@
                             </f:facet>
                         </h:column>
                         <h:column>
-                            <f:facet name="header">Редактирование</f:facet>
-                            <h:commandButton value="Удалить" action="#{cartController.deleteProduct(entry.key)}">
+                            <f:facet name="header"/>
+                            <h:commandButton value="Удалить" action="#{cartController.deleteProduct(product.key)}">
                                 <f:ajax event="click" render="cartBlock cartMenu"/>
                             </h:commandButton>
                         </h:column>
