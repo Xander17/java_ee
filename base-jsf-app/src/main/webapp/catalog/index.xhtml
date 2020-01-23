@@ -1,20 +1,23 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:f="http://xmlns.jcp.org/jsf/core" xmlns:p="http://xmlns.jcp.org/jsf/passthrough"
 >
 <ui:include src="/WEB-INF/header.xhtml">
     <ui:param name="pageTitle" value="Каталог"/>
 </ui:include>
 <h:body>
     <h1 align="center">Каталог</h1>
-    <h:form id="catalogForm">
+    <h:panelGroup id="catalogForm">
         <div align="center">
-            <h:commandLink value="Добавить товар" action="#{catalogController.createProduct()}"/>
+            <h:form>
+                <h:commandButton value="Добавить товар" action="#{catalogController.createProduct()}"
+                                 styleClass="cmd-button"/>
+            </h:form>
         </div>
         <br/>
         <div align="center">
-            <h:dataTable value="#{catalogController.allProducts}" var="product" styleClass="products-table"
+            <h:dataTable value="#{catalogController.getAllProducts()}" var="product" styleClass="products-table"
                          columnClasses="col-id,col-name,col-desc,col-price,col-cart,col-edit">
                 <h:column>
                     <f:facet name="header">Артикул</f:facet>
@@ -24,7 +27,10 @@
                 </h:column>
                 <h:column>
                     <f:facet name="header">Название</f:facet>
-                    <h:commandLink value="#{product.name}" action="#{catalogController.showProduct(product)}"/>
+                    <h:form>
+                        <h:commandLink value="#{product.name}" action="#{catalogController.showProduct(product)}"
+                                       styleClass="product-link"/>
+                    </h:form>
                 </h:column>
                 <h:column>
                     <f:facet name="header">Описание</f:facet>
@@ -38,20 +44,31 @@
                 </h:column>
                 <h:column>
                     <f:facet name="header"/>
-                    <h:commandButton value="В корзину" action="#{catalogController.addToCart(product)}">
-                        <f:ajax event="click" render="cartMenu quantity"/>
-                    </h:commandButton>
+                    <h:form id="cartAdd">
+                        <h:inputText p:type="number" required="true" value="#{1}" styleClass="quantity-input"
+                                     name="quantity" id="quantity" converter="javax.faces.Integer"/>
+                        <h:commandLink
+                                action="#{catalogController.addToCart(product,component.parent.children.get(0).clientId)}">
+                            <h:graphicImage library="images" name="cart-empty-512.png" styleClass="image-button"/>
+                            <f:ajax event="action" render="cartMenu cartAdd"/>
+                        </h:commandLink>
+                    </h:form>
                 </h:column>
                 <h:column>
                     <f:facet name="header"/>
-                    <h:commandButton value="Изменить" action="#{catalogController.editProduct(product)}"/>
-                    <h:commandButton value="Удалить" action="#{catalogController.deleteProduct(product)}">
-                        <f:ajax event="click" render="catalogForm"/>
-                    </h:commandButton>
+                    <h:form>
+                        <h:commandLink action="#{catalogController.editProduct(product)}">
+                            <h:graphicImage library="images" name="write-512.png" styleClass="image-button"/>
+                        </h:commandLink>
+                        <h:commandButton action="#{catalogController.deleteProduct(product)}">
+                            <h:graphicImage library="images" name="cross-24-512.png" styleClass="image-button"/>
+                            <f:ajax event="action" render="catalogForm"/>
+                        </h:commandButton>
+                    </h:form>
                 </h:column>
             </h:dataTable>
         </div>
-    </h:form>
+    </h:panelGroup>
 </h:body>
 <ui:include src="/WEB-INF/footer.xhtml"/>
 </html>

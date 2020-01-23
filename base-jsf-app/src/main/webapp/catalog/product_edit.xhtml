@@ -50,9 +50,9 @@
             <div align="center">
                 <h:messages/>
                 <h:commandButton value="Добавить товар" action="#{catalogController.saveProduct()}"
-                                 rendered="#{catalogController.product.id==null}"/>
+                                 rendered="#{catalogController.product.id==null}" styleClass="cmd-button"/>
                 <h:commandButton value="Сохранить изменения" action="#{catalogController.saveProduct()}"
-                                 rendered="#{catalogController.product.id!=null}"/>
+                                 rendered="#{catalogController.product.id!=null}" styleClass="cmd-button"/>
             </div>
         </h:form>
     </div>

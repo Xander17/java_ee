@@ -4,6 +4,7 @@ import ru.geekbrains.db.Product;
 import ru.geekbrains.db.UserCart;
 
 import javax.enterprise.context.SessionScoped;
+import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
 import java.io.Serializable;
@@ -28,8 +29,15 @@ public class CartController implements Serializable {
         cart.remove(product);
     }
 
-    public void updateQuantity(Map.Entry<Product, Integer> entry) {
-        cart.set(entry.getKey(), entry.getValue());
+    public void updateQuantity(Product product, String qtyId) {
+        String qty = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get(qtyId);
+        if (qty == null) return;
+        try {
+            int quantity = Integer.parseInt(qty);
+            if (quantity < 0) return;
+            cart.set(product, quantity);
+        } catch (NumberFormatException ignored) {
+        }
     }
 
     public String order() {

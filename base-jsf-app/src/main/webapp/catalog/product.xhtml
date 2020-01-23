@@ -21,7 +21,8 @@
             </tr>
             <tr>
                 <td class="col-label"><h:outputLabel value="Описание товара" for="description"/></td>
-                <td class="col-value"><h:outputText id="description" value="#{catalogController.quantityProduct.description}"/></td>
+                <td class="col-value"><h:outputText id="description"
+                                                    value="#{catalogController.quantityProduct.description}"/></td>
             </tr>
             <tr>
                 <td class="col-label"><h:outputLabel value="Цена" for="price"/></td>
@@ -35,13 +36,15 @@
             <h:form>
                 <tr>
                     <td class="col-label"><h:outputLabel for="quantity">Кол-во</h:outputLabel></td>
-                    <td class="col-value"><h:inputText p:type="number" value="#{catalogController.quantityProduct.quantity}" id="quantity"
-                                     name="quantity" styleClass="quantity-input"/></td>
-                </tr>
-                <tr>
-                    <td colspan="2" class="col-value">
-                        <h:commandButton value="Добавить в корзину"
-                                         action="#{catalogController.addToCart(catalogController.quantityProduct)}"/>
+                    <td class="col-value"><h:inputText p:type="number"
+                                                       value="#{catalogController.quantityProduct.quantity}"
+                                                       id="quantity"
+                                                       name="quantity" styleClass="quantity-input"/>
+                        <h:commandLink
+                                action="#{catalogController.addToCart(catalogController.quantityProduct)}">
+                            <h:graphicImage library="images" name="cart-empty-512.png" styleClass="image-button"/>
+                            <f:ajax event="action" render="cartMenu"/>
+                        </h:commandLink>
                     </td>
                 </tr>
             </h:form>

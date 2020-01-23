@@ -6,6 +6,8 @@ import ru.geekbrains.db.QuantityProduct;
 import ru.geekbrains.db.UserCart;
 
 import javax.enterprise.context.SessionScoped;
+import javax.faces.component.UIComponent;
+import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
 import java.io.Serializable;
@@ -23,7 +25,6 @@ public class CatalogController implements Serializable {
 
     private Product product;
     private QuantityProduct quantityProduct;
-    private List<Product> allProducts;
 
     public List<Product> getAllProducts() throws SQLException {
         return productRepository.findAll();
@@ -70,8 +71,15 @@ public class CatalogController implements Serializable {
         return "product.xhtml?faces-redirect=true";
     }
 
-    public void addToCart(Product product) {
-        userCart.add(product, 1);
+    public void addToCart(Product product,String qtyId) {
+        String qty = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get(qtyId);
+        if (qty == null) return;
+        try {
+            int quantity = Integer.parseInt(qty);
+            if (quantity <= 0) return;
+            userCart.add(product, quantity);
+        } catch (NumberFormatException ignored) {
+        }
     }
 
     public void addToCart(QuantityProduct quantityProduct) {

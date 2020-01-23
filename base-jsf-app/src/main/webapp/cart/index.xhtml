@@ -22,7 +22,7 @@
                         </h:column>
                         <h:column>
                             <f:facet name="header">Название</f:facet>
-                            <h:commandLink value="#{product.key.name}" action="#{catalogController.showProduct(product.key)}"/>
+                            <h:commandLink value="#{product.key.name}" action="#{catalogController.showProduct(product.key)}" styleClass="product-link"/>
                         </h:column>
                         <h:column>
                             <f:facet name="header">Описание</f:facet>
@@ -36,10 +36,12 @@
                         </h:column>
                         <h:column>
                             <f:facet name="header">Количество</f:facet>
-                            <h:inputText p:type="number" value="#{product.value}" converter="javax.faces.Integer" styleClass="quantity-input"/>
-                            <h:commandButton value="Изменить" action="#{cartController.updateQuantity(product)}">
-                                <f:ajax event="click" render="cartBlock cartMenu"/>
-                            </h:commandButton>
+                            <h:inputText p:type="number" required="true" value="#{product.value}" styleClass="quantity-input"
+                                         name="quantity" id="quantity" converter="javax.faces.Integer"/>
+                            <h:commandLink action="#{cartController.updateQuantity(product.key,component.parent.children.get(0).clientId)}">
+                                <h:graphicImage library="images" name="sync-512.png" styleClass="image-button"/>
+                                <f:ajax event="action" render="cartBlock cartMenu"/>
+                            </h:commandLink>
                         </h:column>
                         <h:column id="tableSum">
                             <f:facet name="header">Сумма</f:facet>
@@ -54,15 +56,16 @@
                         </h:column>
                         <h:column>
                             <f:facet name="header"/>
-                            <h:commandButton value="Удалить" action="#{cartController.deleteProduct(product.key)}">
-                                <f:ajax event="click" render="cartBlock cartMenu"/>
-                            </h:commandButton>
+                            <h:commandLink action="#{cartController.deleteProduct(product.key)}">
+                                <h:graphicImage library="images" name="cross-24-512.png" styleClass="image-button"/>
+                                <f:ajax event="action" render="cartBlock cartMenu"/>
+                            </h:commandLink>
                         </h:column>
                     </h:dataTable>
                 </h:form>
                 <h:form id="order">
                     <div align="center">
-                        <h:commandButton value="Оформить заказ" action="#{cartController.order()}"/>
+                        <h:commandButton value="Оформить заказ" action="#{cartController.order()}" styleClass="cmd-button"/>
                     </div>
                 </h:form>
             </div>
