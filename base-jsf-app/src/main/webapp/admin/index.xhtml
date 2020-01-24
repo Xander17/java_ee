@@ -1,12 +1,11 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-      xmlns:f="http://xmlns.jcp.org/jsf/core">
-<ui:param name="pageTitle" value="Заказ"/>
+>
+<ui:param name="pageTitle" value="Панель администратора"/>
 <ui:include src="/WEB-INF/header.xhtml"/>
 <h:body>
-    <h1 align="center">#{pageTitle}</h1>
-    <div align="center">Заказ оформлен!</div>
+    <ui:include src="/WEB-INF/admin_menu.xhtml"/>
 </h:body>
 <ui:include src="/WEB-INF/footer.xhtml"/>
 </html>

@@ -92,8 +92,13 @@ td.col-id, td.col-price, td.col-qty, td.col-cart, td.col-edit, td.col-sum {
     margin: 20px 0;
 }
 
+.topmenu td {
+    padding: 10px;
+    width: 20%;
+    text-align: center;
+}
+
 .topmenu a {
-    padding: 20px;
     font-weight: bold;
     color: dimgrey;
     text-decoration: none;

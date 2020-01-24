@@ -6,18 +6,25 @@
 >
 
 <h:body>
-    <div align="center" class="topmenu">
-        <h:link value="Главная страница" outcome="/index.xhtml"/>
-        <h:link value="Каталог" outcome="/catalog/index.xhtml"/>
-        <h:link outcome="/cart/index.xhtml">
-            <h:panelGroup id="cartMenu">
-                <h:outputText value="Корзина"/>
-                <h:panelGroup rendered="#{cartController.getCartSize()>0}">
-                    <h:outputText value="(#{cartController.getCartSize()})"/>
-                </h:panelGroup>
-            </h:panelGroup>
-        </h:link>
-        <h:link value="О компании" outcome="/about/index.xhtml"/>
+    <div align="center">
+        <table class="topmenu">
+            <tr>
+                <td><h:link value="Главная" outcome="/index.xhtml"/></td>
+                <td><h:link value="Каталог" outcome="/catalog/index.xhtml"/></td>
+                <td>
+                    <h:link outcome="/cart/index.xhtml">
+                        <h:panelGroup id="cartMenu">
+                            <h:outputText value="Корзина"/>
+                            <h:panelGroup rendered="#{cartController.getCartSize()>0}">
+                                <h:outputText value="(#{cartController.getCartSize()})"/>
+                            </h:panelGroup>
+                        </h:panelGroup>
+                    </h:link>
+                </td>
+                <td><h:link value="О компании" outcome="/about/index.xhtml"/></td>
+                <td><h:link value="Админ" outcome="/admin/index.xhtml"/></td>
+            </tr>
+        </table>
     </div>
 </h:body>
 </html>

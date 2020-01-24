@@ -6,16 +6,19 @@ public class Product implements Comparable<Product> {
     private Integer id;
     private String name;
     private String description;
+    private Category category;
     private Double price;
 
     public Product() {
+        category=new Category();
     }
 
-    public Product(int id, String name, String description, Double price) {
+    public Product(int id, String name, String description, Double price, Category category) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.price = price;
+        this.category = category;
     }
 
     public Integer getId() {
@@ -48,6 +51,14 @@ public class Product implements Comparable<Product> {
 
     public void setPrice(Double price) {
         this.price = price;
+    }
+
+    public Category getCategory() {
+        return category;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
     }
 
     @Override

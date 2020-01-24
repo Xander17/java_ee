@@ -3,11 +3,10 @@
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:f="http://xmlns.jcp.org/jsf/core" xmlns:p="http://xmlns.jcp.org/jsf/passthrough"
 >
-<ui:include src="/WEB-INF/header.xhtml">
-    <ui:param name="pageTitle" value="Корзина"/>
-</ui:include>
+<ui:param name="pageTitle" value="Корзина"/>
+<ui:include src="/WEB-INF/header.xhtml"/>
 <h:body>
-    <h1 align="center">Корзина</h1>
+    <h1 align="center">#{pageTitle}</h1>
     <h:panelGroup id="cartBlock">
         <h:panelGroup rendered="#{cartController.getCartSize()>0}">
             <div align="center">

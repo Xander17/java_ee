@@ -2,11 +2,10 @@
              xmlns:h="http://xmlns.jcp.org/jsf/html"
              xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
              xmlns:f="http://xmlns.jcp.org/jsf/core">
-<ui:include src="WEB-INF/header.xhtml">
-    <ui:param name="pageTitle" value="Главная страница"/>
-</ui:include>
+<ui:param name="pageTitle" value="Главная страница"/>
+<ui:include src="WEB-INF/header.xhtml"/>
 <h:body>
-    <h1 align="center">Главная страница</h1>
+    <h1 align="center">#{pageTitle}</h1>
 </h:body>
 <ui:include src="WEB-INF/footer.xhtml"/>
 </html>

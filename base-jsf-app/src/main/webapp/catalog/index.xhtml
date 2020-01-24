@@ -4,22 +4,14 @@
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:p="http://xmlns.jcp.org/jsf/passthrough"
 >
-<ui:include src="/WEB-INF/header.xhtml">
-    <ui:param name="pageTitle" value="Каталог"/>
-</ui:include>
+<ui:param name="pageTitle" value="Каталог"/>
+<ui:include src="/WEB-INF/header.xhtml"/>
 <h:body>
-    <h1 align="center">Каталог</h1>
-        <div align="center">
-            <h:form>
-                <h:commandButton value="Добавить товар" action="#{catalogController.createProduct()}"
-                                 styleClass="cmd-button"/>
-            </h:form>
-        </div>
-        <br/>
+    <h1 align="center">#{pageTitle}</h1>
         <div align="center">
             <h:form id="catalogForm">
                 <h:dataTable value="#{catalogController.getAllProducts()}" var="product" styleClass="products-table"
-                             columnClasses="col-id,col-name,col-desc,col-price,col-cart,col-edit">
+                             columnClasses="col-id,col-name,col-desc,col-price,col-cart">
                     <h:column>
                         <f:facet name="header">Артикул</f:facet>
                         <h:outputText value="#{product.id}">
@@ -51,18 +43,6 @@
                                 <h:graphicImage library="images" name="cart-empty-512.png" styleClass="image-button"/>
                                 <f:ajax event="action" render="cartMenu qty-cell"/>
                             </h:commandLink>
-                        </h:panelGroup>
-                    </h:column>
-                    <h:column>
-                        <f:facet name="header"/>
-                        <h:panelGroup styleClass="flex-cell">
-                            <h:commandLink action="#{catalogController.editProduct(product)}">
-                                <h:graphicImage library="images" name="write-512.png" styleClass="image-button"/>
-                            </h:commandLink>
-                            <h:commandButton action="#{catalogController.deleteProduct(product)}">
-                                <h:graphicImage library="images" name="cross-24-512.png" styleClass="image-button"/>
-                                <f:ajax event="action" render="catalogForm"/>
-                            </h:commandButton>
                         </h:panelGroup>
                     </h:column>
                 </h:dataTable>

@@ -38,7 +38,7 @@
                     <td class="col-label"><label for="quantity">Кол-во</label></td>
                     <td class="col-value">
                         <h:panelGroup styleClass="flex-cell" id="qty-cell">
-                            <input type="number" value="1" name="quantity" id="quantity" class="quantity-input"/>
+                            <input type="number" value="1" name="quantity" id="quantity" class="quantity-input" autocomplete="off"/>
                             <h:commandLink
                                     action="#{catalogController.addToCart(catalogController.product)}">
                                 <h:graphicImage library="images" name="cart-empty-512.png" styleClass="image-button"/>

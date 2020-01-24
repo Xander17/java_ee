@@ -1,0 +1,73 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://xmlns.jcp.org/jsf/passthrough">
+<ui:include src="/WEB-INF/header.xhtml">
+    <ui:param name="pageTitle" value="Редактирование товара"/>
+</ui:include>
+<h:body>
+    <h1 align="center">
+        <h:outputText value="Редактирование товара" rendered="#{adminController.product.id!=null}"/>
+        <h:outputText value="Добавление товара" rendered="#{adminController.product.id==null}"/>
+    </h1>
+
+    <div align="center">
+        <h:form id="editForm">
+            <table class="productview-table">
+                <ui:fragment rendered="#{adminController.product.id!=null}">
+                    <tr>
+                        <td class="col-label"><h:outputLabel value="Артикул" for="id"/></td>
+                        <td class="col-value"><h:outputText id="id" value="#{adminController.product.id}">
+                            <f:convertNumber minIntegerDigits="8" pattern="########"/>
+                        </h:outputText></td>
+                    </tr>
+                </ui:fragment>
+                <tr>
+                    <td class="col-label"><h:outputLabel value="Название товара" for="name"/></td>
+                    <td class="col-value">
+                        <h:inputText value="#{adminController.product.name}" id="name"
+                                     placeholder="Введите название" required="true"
+                                     requiredMessage="Требуется ввести название"/></td>
+                </tr>
+                <tr>
+                    <td class="col-label"><h:outputLabel value="Описание товара" for="description"/></td>
+                    <td class="col-value">
+                        <h:inputText value="#{adminController.product.description}" id="description"
+                                     placeholder="Введите описание"/></td>
+                </tr>
+                <tr>
+                    <td class="col-label"><h:outputLabel value="Категория" for="category"/></td>
+                    <td class="col-value">
+                        <h:selectOneMenu value="#{adminController.product.category.id}" id="category">
+                            <f:selectItem itemLabel="Выберите категорию"/>
+                            <f:selectItems value="#{categoryRepository.findAll()}" var="cat"
+                                           itemLabel="#{cat.name}" itemValue="#{cat.id}"/>
+                        </h:selectOneMenu>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-label"><h:outputLabel value="Цена" for="price"/></td>
+                    <td class="col-value"><h:inputText p:type="number" value="#{adminController.product.price}"
+                                                       id="price"
+                                                       placeholder="Введите цену" required="true"
+                                                       requiredMessage="Требуется ввести цену"
+                                                       validatorMessage="Цена должна быть больше нуля"
+                                                       converter="javax.faces.Double">
+                        <f:validateDoubleRange minimum="0.01"/>
+                    </h:inputText>
+                    </td>
+                </tr>
+            </table>
+            <div align="center">
+                <h:messages/>
+                <h:commandButton value="Добавить товар" action="#{adminController.saveProduct()}"
+                                 rendered="#{adminController.product.id==null}" styleClass="cmd-button"/>
+                <h:commandButton value="Сохранить изменения" action="#{adminController.saveProduct()}"
+                                 rendered="#{adminController.product.id!=null}" styleClass="cmd-button"/>
+            </div>
+        </h:form>
+    </div>
+</h:body>
+<ui:include src="/WEB-INF/footer.xhtml"/>
+</html>
