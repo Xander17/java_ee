@@ -2,11 +2,9 @@ package ru.geekbrains.controllers;
 
 import ru.geekbrains.db.Product;
 import ru.geekbrains.db.ProductRepository;
-import ru.geekbrains.db.QuantityProduct;
 import ru.geekbrains.db.UserCart;
 
 import javax.enterprise.context.SessionScoped;
-import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -24,7 +22,7 @@ public class CatalogController implements Serializable {
     private UserCart userCart;
 
     private Product product;
-    private QuantityProduct quantityProduct;
+    private int defaultValue;
 
     public List<Product> getAllProducts() throws SQLException {
         return productRepository.findAll();
@@ -58,31 +56,30 @@ public class CatalogController implements Serializable {
         this.product = product;
     }
 
-    public QuantityProduct getQuantityProduct() {
-        return quantityProduct;
-    }
-
-    public void setQuantityProduct(QuantityProduct quantityProduct) {
-        this.quantityProduct = quantityProduct;
-    }
-
     public String showProduct(Product product) {
-        this.quantityProduct = new QuantityProduct(product, 1);
+        this.product = product;
         return "product.xhtml?faces-redirect=true";
     }
 
-    public void addToCart(Product product,String qtyId) {
+    public void addToCart(Product product, String qtyId) {
         String qty = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get(qtyId);
         if (qty == null) return;
         try {
             int quantity = Integer.parseInt(qty);
             if (quantity <= 0) return;
-            userCart.add(product, quantity);
+            userCart.add(product.getId(), quantity);
         } catch (NumberFormatException ignored) {
         }
     }
 
-    public void addToCart(QuantityProduct quantityProduct) {
-        userCart.add(quantityProduct.getProduct(), quantityProduct.getQuantity());
+    public void addToCart(Product product) {
+        addToCart(product, "quantity");
+    }
+
+    public int getDefaultValue() {
+        return 1;
+    }
+
+    public void setDefaultValue(int defaultValue) {
     }
 }

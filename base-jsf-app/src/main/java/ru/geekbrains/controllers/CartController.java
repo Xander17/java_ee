@@ -8,6 +8,7 @@ import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
 import java.io.Serializable;
+import java.sql.SQLException;
 import java.util.Map;
 
 @Named
@@ -17,16 +18,16 @@ public class CartController implements Serializable {
     @Inject
     private UserCart cart;
 
-    public Map<Product, Integer> getCart() {
+    public Map<Product, Integer> getCart() throws SQLException {
         return cart.getCart();
     }
 
-    public int getCartSize() {
+    public int getCartSize() throws SQLException {
         return cart.getCart().size();
     }
 
     public void deleteProduct(Product product) {
-        cart.remove(product);
+        cart.remove(product.getId());
     }
 
     public void updateQuantity(Product product, String qtyId) {
@@ -35,7 +36,7 @@ public class CartController implements Serializable {
         try {
             int quantity = Integer.parseInt(qty);
             if (quantity < 0) return;
-            cart.set(product, quantity);
+            cart.set(product.getId(), quantity);
         } catch (NumberFormatException ignored) {
         }
     }
@@ -45,7 +46,7 @@ public class CartController implements Serializable {
         return "order.xhtml?faces-redirect=true";
     }
 
-    public double getCartSum() {
+    public double getCartSum() throws SQLException {
         double sum = 0;
         for (Map.Entry<Product, Integer> entry : cart.getCart().entrySet()) {
             sum += entry.getKey().getPrice() * entry.getValue();
