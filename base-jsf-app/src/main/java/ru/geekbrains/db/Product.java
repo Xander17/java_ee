@@ -10,7 +10,11 @@ public class Product implements Comparable<Product> {
     private Double price;
 
     public Product() {
-        category=new Category();
+        category = new Category();
+    }
+
+    public Product(int id) {
+        this.id = id;
     }
 
     public Product(int id, String name, String description, Double price, Category category) {

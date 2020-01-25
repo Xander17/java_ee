@@ -4,13 +4,13 @@ public class OrderItem {
     private Product product;
     private Double price;
     private Integer quantity;
-    private Double sum;
+    //private Double sum;
 
     public OrderItem(Product product, Double price, Integer quantity) {
         this.product = product;
         this.price = price;
         this.quantity = quantity;
-        setSum(null);
+        //setSum(null);
     }
 
     public Product getProduct() {
@@ -37,11 +37,11 @@ public class OrderItem {
         this.quantity = quantity;
     }
 
-    public Double getSum() {
-        return sum;
-    }
-
-    public void setSum(Double sum) {
-        this.sum = Math.round(price * quantity * 100) / 100.;
-    }
+//    public Double getSum() {
+//        return sum;
+//    }
+//
+//    public void setSum(Double sum) {
+//        this.sum = Math.round(price * quantity * 100) / 100.;
+//    }
 }

@@ -18,6 +18,8 @@ public class CartController implements Serializable {
     @Inject
     private UserCart cart;
 
+    private Integer lastOrderId;
+
     public Map<Product, Integer> getCart() throws SQLException {
         return cart.getCart();
     }
@@ -41,8 +43,8 @@ public class CartController implements Serializable {
         }
     }
 
-    public String order() {
-        cart.clear();
+    public String order() throws SQLException {
+        lastOrderId = cart.order();
         return "order.xhtml?faces-redirect=true";
     }
 
@@ -52,5 +54,13 @@ public class CartController implements Serializable {
             sum += entry.getKey().getPrice() * entry.getValue();
         }
         return Math.round(sum * 100) / 100.;
+    }
+
+    public String getLastOrderId() {
+        return String.format("%08d", lastOrderId);
+    }
+
+    public void setLastOrderId(Integer lastOrderId) {
+        this.lastOrderId = lastOrderId;
     }
 }

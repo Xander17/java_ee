@@ -25,15 +25,16 @@ public class OrderRepository {
     }
 
 
-    public void insert(Order order) throws SQLException {
+    public int insert(Order order) throws SQLException {
         int id = 0;
         try (Statement statement = connection.createStatement()) {
+            statement.execute("insert into orders values()");
             ResultSet rs = statement.executeQuery("select max(id) from orders;");
             if (rs.next()) id = rs.getInt(1);
         }
 
         try (PreparedStatement statement = connection.prepareStatement(
-                "insert into orders values (?, ?, ?, ?);")) {
+                "insert into order_items values (?, ?, ?, ?);")) {
             List<OrderItem> list = order.getList();
             for (int i = 0; i < list.size(); i++) {
                 OrderItem item = list.get(i);
@@ -44,23 +45,25 @@ public class OrderRepository {
                 statement.execute();
             }
         }
+        return id;
     }
 
     public void update(OrderItem orderItem, int id) throws SQLException {
         try (PreparedStatement statement = connection.prepareStatement(
-                "update orders set `price` = ?, `quantity` = ? where `id` = ?;")) {
+                "update order_items set `price` = ?, `quantity` = ? where `id` = ? and `product_id`=?;")) {
             statement.setDouble(1, orderItem.getPrice());
             statement.setInt(2, orderItem.getQuantity());
             statement.setInt(3, id);
+            statement.setInt(4, orderItem.getProduct().getId());
             statement.execute();
         }
     }
 
     public void deleteProduct(int id, Product product) throws SQLException {
         try (PreparedStatement statement = connection.prepareStatement(
-                "delete from orders where id = ? and product_id = ?;")) {
+                "delete from order_items where id = ? and product_id = ?;")) {
             statement.setInt(1, id);
-            statement.setInt(1, product.getId());
+            statement.setInt(2, product.getId());
             statement.execute();
         }
     }
@@ -74,9 +77,15 @@ public class OrderRepository {
     }
 
 
-    private List<OrderItem> getOrderList(int id) throws SQLException {
+    public Order getOrder(int id) throws SQLException {
+        try (PreparedStatement statement = connection.prepareStatement("select id from orders where id=?;")) {
+            statement.setInt(1, id);
+            ResultSet rs = statement.executeQuery();
+            if (!rs.next()) return new Order(new ArrayList<>(), -1);
+        }
+
         List<OrderItem> list = new ArrayList<>();
-        try (PreparedStatement statement = connection.prepareStatement("product_id, price, quantity from orders where id=?;")) {
+        try (PreparedStatement statement = connection.prepareStatement("select product_id, price, quantity from order_items where id=?;")) {
             statement.setInt(1, id);
             ResultSet rs = statement.executeQuery();
             while (rs.next()) {
@@ -85,21 +94,18 @@ public class OrderRepository {
                 list.add(new OrderItem(product, rs.getDouble(2), rs.getInt(3)));
             }
         }
-        return list;
+        return new Order(list, id);
     }
 
-    public List<Order> getOrders() throws SQLException {
-        List<Order> list = new ArrayList<>();
-        List<Integer> indexes = new ArrayList<>();
+    public List<OrderLine> getOrders() throws SQLException {
+        List<OrderLine> list = new ArrayList<>();
         try (Statement statement = connection.createStatement()) {
-            ResultSet rs = statement.executeQuery("select distinct id from `orders`;");
-            while (rs.next()) indexes.add(rs.getInt(1));
-        }
-        if (indexes.size() == 0) return null;
-        for (Integer index : indexes) {
-            list.add(new Order(getOrderList(index), index));
+            ResultSet rs = statement.executeQuery("select a.id, count(b.id), sum(b.price*b.quantity) from orders as a join order_items as b on a.id=b.id group by a.id;");
+            while (rs.next()) {
+                int count = rs.getInt(2);
+                if (count > 0) list.add(new OrderLine(rs.getInt(1), count, rs.getDouble(3)));
+            }
         }
         return list;
     }
-
 }

@@ -20,18 +20,27 @@ h1 {
     border-spacing: 0;
 }
 
-.products-table td {
+.products-table td, .categories-table td, .orders-table td {
     border: solid dimgrey;
     border-width: 0 0 2px 0;
     padding: 5px;
     vertical-align: center;
 }
 
-.products-table th {
+.products-table th, .categories-table th, .orders-table th {
     text-align: center;
     font-weight: bold;
     border: solid dimgrey;
     border-width: 0 0 4px 0;
+    white-space: nowrap;
+}
+
+.categories-table th.header-left {
+    text-align: left;
+}
+
+.orders-table th.header-right, td.col-order-qty {
+    text-align: right;
 }
 
 .products-table tfoot td {
@@ -54,27 +63,33 @@ td.col-id, td.col-price, td.col-qty, td.col-cart, td.col-edit, td.col-sum {
     white-space: nowrap;
 }
 
-.col-name {
-    width: 30%;
+.orders-table .col-sum {
+    width: 20%;
 }
 
-.productview-table {
+.col-name,.col-category {
+    width: 20%;
+}
+
+.productview-table, .orders-table, .categories-table {
     width: 40%;
+    border-spacing: 0;
 }
 
 .col-label, .col-value {
     width: 50%;
 }
 
-.col-value {
+.col-value, .col-order-qty {
     text-align: right;
 }
 
-.products-table tr:hover {
+.products-table tr:hover, .categories-table tr:hover, .orders-table tr:hover {
     background-color: #e9e9e9;
 }
 
-.products-table thead tr:hover, .products-table tfoot tr:hover {
+.products-table thead tr:hover, .products-table tfoot tr:hover,
+.categories-table thead tr:hover, .orders-table thead tr:hover {
     background-color: transparent;
 }
 
@@ -145,12 +160,11 @@ td.col-id, td.col-price, td.col-qty, td.col-cart, td.col-edit, td.col-sum {
     transition: 0.3s;
 }
 
-.cmd-button:focus, .image-button:focus, .quantity-input:focus {
+.cmd-button:focus, .image-button:focus {
     outline: 0;
 }
 
-.quantity-input {
-    width: 60px;
+.quantity-input, .text-input, .new-category-input, .product-edit-input {
     height: 26px;
     border-radius: 5px;
     border: 2px solid dimgrey;
@@ -159,11 +173,30 @@ td.col-id, td.col-price, td.col-qty, td.col-cart, td.col-edit, td.col-sum {
     padding: 2px;
     margin: 2px;
     display: inline-block;
-    text-align: center;
     vertical-align: center;
 }
 
-.quantity-input:hover {
+.quantity-input {
+    width: 60px;
+    text-align: center;
+}
+
+.text-input {
+    width: 90%;
+    text-align: left;
+}
+
+.new-category-input{
+    width: 300px;
+}
+
+.product-edit-input{
+    width: 200px;
+}
+
+.quantity-input:hover, .text-input:hover, .new-category-input:hover, .product-edit-input:hover
+.quantity-input:focus, .text-input:focus, .new-category-input:focus, .product-edit-input:focus {
+    outline: 0;
     border: 2px solid black;
 }
 
@@ -175,4 +208,14 @@ td.col-id, td.col-price, td.col-qty, td.col-cart, td.col-edit, td.col-sum {
 
 .productview-table .flex-cell {
     justify-content: flex-end;
+}
+
+.categories-table .flex-cell {
+    justify-content: flex-start;
+}
+
+.col-cat {
+    width: 60%;
+    text-align: left;
+    white-space: nowrap;
 }

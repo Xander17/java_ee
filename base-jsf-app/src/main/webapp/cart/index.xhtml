@@ -8,8 +8,8 @@
 <h:body>
     <h1 align="center">#{pageTitle}</h1>
     <h:panelGroup id="cartBlock">
-        <h:panelGroup rendered="#{cartController.getCartSize()>0}">
-            <div align="center">
+        <div align="center">
+            <h:panelGroup rendered="#{cartController.getCartSize()>0}">
                 <h:form id="cartForm">
                     <h:dataTable value="#{cartController.cart}" var="product" styleClass="products-table"
                                  columnClasses="col-id,col-name,col-desc,col-price,col-qty,col-sum,col-edit">
@@ -71,19 +71,16 @@
                         </h:column>
                     </h:dataTable>
                 </h:form>
-                <h:form id="order">
-                    <div align="center">
-                        <h:commandButton value="Оформить заказ" action="#{cartController.order()}"
-                                         styleClass="cmd-button"/>
-                    </div>
-                </h:form>
-            </div>
-        </h:panelGroup>
-        <h:panelGroup rendered="#{cartController.getCartSize()==0}">
-            <div align="center">
+
+            <h:form id="order">
+                <h:commandButton value="Оформить заказ" action="#{cartController.order()}"
+                                 styleClass="cmd-button"/>
+            </h:form>
+            </h:panelGroup>
+            <h:panelGroup rendered="#{cartController.getCartSize()==0}">
                 <h:outputText value="Корзина пуста"/>
-            </div>
-        </h:panelGroup>
+            </h:panelGroup>
+        </div>
     </h:panelGroup>
 </h:body>
 <ui:include src="/WEB-INF/footer.xhtml"/>

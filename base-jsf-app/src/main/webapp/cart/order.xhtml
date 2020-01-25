@@ -2,11 +2,14 @@
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:f="http://xmlns.jcp.org/jsf/core">
-<ui:param name="pageTitle" value="Заказ"/>
+<ui:param name="pageTitle" value="Заказ #{cartController.lastOrderId}"/>
 <ui:include src="/WEB-INF/header.xhtml"/>
 <h:body>
-    <h1 align="center">#{pageTitle}</h1>
-    <div align="center">Заказ оформлен!</div>
+    <h1 align="center"><h:outputText value="#{pageTitle}"/></h1>
+    <div align="center">Заказ <h:outputText value="#{cartController.lastOrderId}">
+        <f:convertNumber minIntegerDigits="8" pattern="########"/>
+    </h:outputText> оформлен!
+    </div>
 </h:body>
 <ui:include src="/WEB-INF/footer.xhtml"/>
 </html>

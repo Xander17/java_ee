@@ -22,13 +22,21 @@ public class DBTables {
                     "  KEY `cat_idx` (`category`),\n" +
                     "  CONSTRAINT `cat` FOREIGN KEY (`category`) REFERENCES `categories` (`id`) ON DELETE SET NULL\n" +
                     ");");
-            statement.execute("CREATE TABLE IF NOT EXISTS `orders` (" +
-                    "`id` int(11) NOT NULL, " +
-                    "`product_id` int(11) NOT NULL, " +
-                    "`price` decimal(19,2) NOT NULL, " +
-                    "`quantity` int(11) NOT NULL, " +
-                    "KEY `product_idx` (`product_id`), " +
-                    "CONSTRAINT `product` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`));");
+            statement.execute("CREATE TABLE IF NOT EXISTS `orders` (\n" +
+                    "  `id` int(11) NOT NULL AUTO_INCREMENT,\n" +
+                    "  PRIMARY KEY (`id`),\n" +
+                    "  UNIQUE KEY `id_UNIQUE` (`id`)\n" +
+                    ");");
+            statement.execute("CREATE TABLE IF NOT EXISTS `order_items` (\n" +
+                    "  `id` int(11) NOT NULL,\n" +
+                    "  `product_id` int(11) DEFAULT NULL,\n" +
+                    "  `price` decimal(19,2) NOT NULL,\n" +
+                    "  `quantity` int(11) NOT NULL,\n" +
+                    "  KEY `product_idx` (`product_id`),\n" +
+                    "  KEY `id_idx` (`id`),\n" +
+                    "  CONSTRAINT `order_id` FOREIGN KEY (`id`) REFERENCES `orders` (`id`) ON DELETE CASCADE,\n" +
+                    "  CONSTRAINT `product_id` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`) ON DELETE SET NULL\n" +
+                    ");");
         }
     }
 }

@@ -8,7 +8,7 @@ public class Order {
     private Integer id;
 
     public Order(List<OrderItem> list) {
-        this(list,null);
+        this(list, null);
     }
 
     public Order(List<OrderItem> list, Integer id) {
@@ -30,5 +30,9 @@ public class Order {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public String getFormattedId() {
+        return String.format("%08d", id);
     }
 }

@@ -28,20 +28,20 @@
                     <td class="col-value">
                         <h:inputText value="#{adminController.product.name}" id="name"
                                      placeholder="Введите название" required="true"
-                                     requiredMessage="Требуется ввести название"/></td>
+                                     requiredMessage="Требуется ввести название" styleClass="product-edit-input"/></td>
                 </tr>
                 <tr>
                     <td class="col-label"><h:outputLabel value="Описание товара" for="description"/></td>
                     <td class="col-value">
                         <h:inputText value="#{adminController.product.description}" id="description"
-                                     placeholder="Введите описание"/></td>
+                                     placeholder="Введите описание" styleClass="product-edit-input"/></td>
                 </tr>
                 <tr>
                     <td class="col-label"><h:outputLabel value="Категория" for="category"/></td>
                     <td class="col-value">
-                        <h:selectOneMenu value="#{adminController.product.category.id}" id="category">
+                        <h:selectOneMenu value="#{adminController.product.category.id}" id="category" styleClass="product-edit-input">
                             <f:selectItem itemLabel="Выберите категорию"/>
-                            <f:selectItems value="#{categoryRepository.findAll()}" var="cat"
+                            <f:selectItems value="#{adminController.getCategories()}" var="cat"
                                            itemLabel="#{cat.name}" itemValue="#{cat.id}"/>
                         </h:selectOneMenu>
                     </td>
@@ -53,7 +53,7 @@
                                                        placeholder="Введите цену" required="true"
                                                        requiredMessage="Требуется ввести цену"
                                                        validatorMessage="Цена должна быть больше нуля"
-                                                       converter="javax.faces.Double">
+                                                       converter="javax.faces.Double" styleClass="product-edit-input">
                         <f:validateDoubleRange minimum="0.01"/>
                     </h:inputText>
                     </td>
