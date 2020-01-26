@@ -8,7 +8,7 @@ public class OrderLine {
     public OrderLine(Integer id, Integer count, Double sum) {
         this.id = id;
         this.count = count;
-        this.sum=sum;
+        this.sum = sum;
     }
 
     public Integer getId() {

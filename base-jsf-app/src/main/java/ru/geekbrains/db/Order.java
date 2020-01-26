@@ -1,26 +1,29 @@
 package ru.geekbrains.db;
 
-import java.util.ArrayList;
+import javax.persistence.*;
 import java.util.List;
 
+@Entity
+@Table(name = "orders")
 public class Order {
-    private List<OrderItem> list;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+    private List<OrderItem> list;
 
-    public Order(List<OrderItem> list) {
-        this(list, null);
+    public Order() {
     }
 
-    public Order(List<OrderItem> list, Integer id) {
-        this.list = list;
-        this.id = id;
+    public Order(List<OrderItem> list) {
+        this.list=list;
     }
 
     public List<OrderItem> getList() {
         return list;
     }
 
-    public void setList(ArrayList<OrderItem> list) {
+    public void setList(List<OrderItem> list) {
         this.list = list;
     }
 

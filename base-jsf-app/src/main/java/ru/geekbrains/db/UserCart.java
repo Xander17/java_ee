@@ -5,7 +5,6 @@ import javax.enterprise.context.SessionScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 import java.io.Serializable;
-import java.sql.SQLException;
 import java.util.*;
 
 @Named
@@ -37,7 +36,7 @@ public class UserCart implements Serializable {
         cart.remove(id);
     }
 
-    public Map<Product, Integer> getCart() throws SQLException {
+    public Map<Product, Integer> getCart() {
         Map<Product, Integer> productCart = new TreeMap<>();
         for (Map.Entry<Integer, Integer> entry : cart.entrySet()) {
             Product product = productRepository.findById(entry.getKey());
@@ -46,17 +45,22 @@ public class UserCart implements Serializable {
         return productCart;
     }
 
+    public int getCartSize() {
+        return cart.size();
+    }
+
     public void clear() {
         cart.clear();
     }
 
-    public int order() throws SQLException {
+    public int order() {
+        Order order = new Order();
         List<OrderItem> list = new ArrayList<>();
         for (Map.Entry<Integer, Integer> entry : cart.entrySet()) {
             Product product = productRepository.findById(entry.getKey());
-            if (product.getId() >= 0) list.add(new OrderItem(product, product.getPrice(), entry.getValue()));
+            if (product.getId() >= 0) list.add(new OrderItem(order, product, product.getPrice(), entry.getValue()));
         }
-        Order order = new Order(list);
+        order.setList(list);
         clear();
         return orderRepository.insert(order);
     }

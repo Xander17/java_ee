@@ -19,13 +19,15 @@ public class CartController implements Serializable {
     private UserCart cart;
 
     private Integer lastOrderId;
+    private int cartSize;
 
-    public Map<Product, Integer> getCart() throws SQLException {
+
+    public Map<Product, Integer> getCart() {
         return cart.getCart();
     }
 
-    public int getCartSize() throws SQLException {
-        return cart.getCart().size();
+    public int getCartSize() {
+        return cart.getCartSize();
     }
 
     public void deleteProduct(Product product) {
@@ -43,12 +45,12 @@ public class CartController implements Serializable {
         }
     }
 
-    public String order() throws SQLException {
+    public String order() {
         lastOrderId = cart.order();
         return "order.xhtml?faces-redirect=true";
     }
 
-    public double getCartSum() throws SQLException {
+    public double getCartSum() {
         double sum = 0;
         for (Map.Entry<Product, Integer> entry : cart.getCart().entrySet()) {
             sum += entry.getKey().getPrice() * entry.getValue();

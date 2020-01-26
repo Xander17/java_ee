@@ -5,58 +5,61 @@
 <ui:param name="pageTitle" value="Редактирование категорий"/>
 <ui:include src="/WEB-INF/header.xhtml"/>
 <h:body>
+    <f:event listener="${adminController.preloadCategories}" type="preRenderView"/>
     <ui:include src="/WEB-INF/admin_menu.xhtml"/>
     <h1 align="center"><h:outputText value="#{pageTitle}"/></h1>
     <div align="center">
-        <h:form>
-            <input placeholder="Введите название" name="newcategory" id="newcategory" class="new-category-input"/>
-            <h:commandButton value="Добавить категорию" action="#{adminController.addCategory()}"
-                             styleClass="cmd-button">
-                <f:ajax event="action" render="categoryForm"/>
-            </h:commandButton>
-        </h:form>
-        <br/>
-        <h:form id="categoryForm">
-            <h:dataTable value="#{adminController.getCategories()}" var="cat" styleClass="categories-table"
-                         columnClasses="col-id,col-cat,col-edit">
-                <h:column>
-                    <f:facet name="header">ID</f:facet>
-                    <h:outputText value="#{cat.id}">
-                        <f:convertNumber minIntegerDigits="3" pattern="###"/>
-                    </h:outputText>
-                </h:column>
-                <h:column headerClass="header-left">
-                    <f:facet name="header">Категория</f:facet>
-                    <h:panelGroup rendered="#{adminController.editId!=cat.id}">
-                        <h:outputText value="#{cat.name}"/>
-                    </h:panelGroup>
-                    <h:panelGroup rendered="#{adminController.editId==cat.id}">
-                        <input value="#{cat.name}" class="text-input" name="category-name"
-                               id="category-name" autocomplete="off"/>
-                    </h:panelGroup>
-                </h:column>
-                <h:column>
-                    <h:panelGroup styleClass="flex-cell">
-                        <h:panelGroup rendered="#{adminController.editId!=cat.id}">
-                            <h:commandLink action="#{adminController.setEditStatus(cat)}">
-                                <h:graphicImage library="images" name="write-512.png" styleClass="image-button"/>
+        <h:panelGroup id="categoryBlock">
+            <h:form>
+                <input placeholder="Введите название" name="newcategory" id="newcategory" class="new-category-input"/>
+                <h:commandButton value="Добавить категорию" action="#{adminController.addCategory()}"
+                                 styleClass="cmd-button">
+                    <f:ajax event="action" render="categoryBlock"/>
+                </h:commandButton>
+            </h:form>
+            <br/>
+            <h:form id="categoryForm">
+                <h:dataTable value="#{adminController.getCategories()}" var="cat" styleClass="categories-table"
+                             columnClasses="col-id,col-cat,col-edit">
+                    <h:column>
+                        <f:facet name="header">ID</f:facet>
+                        <h:outputText value="#{cat.id}">
+                            <f:convertNumber minIntegerDigits="3" pattern="###"/>
+                        </h:outputText>
+                    </h:column>
+                    <h:column headerClass="header-left">
+                        <f:facet name="header">Категория</f:facet>
+                        <h:panelGroup rendered="#{adminController.categoryEditId!=cat.id}">
+                            <h:outputText value="#{cat.name}"/>
+                        </h:panelGroup>
+                        <h:panelGroup rendered="#{adminController.categoryEditId==cat.id}">
+                            <input value="#{cat.name}" class="text-input" name="category-name"
+                                   id="category-name" autocomplete="off"/>
+                        </h:panelGroup>
+                    </h:column>
+                    <h:column>
+                        <h:panelGroup styleClass="flex-cell">
+                            <h:panelGroup rendered="#{adminController.categoryEditId!=cat.id}">
+                                <h:commandLink action="#{adminController.setEditStatus(cat)}">
+                                    <h:graphicImage library="images" name="write-512.png" styleClass="image-button"/>
+                                    <f:ajax event="action" render="categoryForm"/>
+                                </h:commandLink>
+                            </h:panelGroup>
+                            <h:panelGroup rendered="#{adminController.categoryEditId==cat.id}">
+                                <h:commandLink action="#{adminController.updateCategory(cat)}">
+                                    <h:graphicImage library="images" name="save.png" styleClass="image-button"/>
+                                    <f:ajax event="action" render="categoryForm"/>
+                                </h:commandLink>
+                            </h:panelGroup>
+                            <h:commandLink action="#{adminController.deleteCategory(cat)}">
+                                <h:graphicImage library="images" name="cross-24-512.png" styleClass="image-button"/>
                                 <f:ajax event="action" render="categoryForm"/>
                             </h:commandLink>
                         </h:panelGroup>
-                        <h:panelGroup rendered="#{adminController.editId==cat.id}">
-                            <h:commandLink action="#{adminController.updateCategory(cat)}">
-                                <h:graphicImage library="images" name="save.png" styleClass="image-button"/>
-                                <f:ajax event="action" render="categoryForm"/>
-                            </h:commandLink>
-                        </h:panelGroup>
-                        <h:commandLink action="#{adminController.deleteCategory(cat)}">
-                            <h:graphicImage library="images" name="cross-24-512.png" styleClass="image-button"/>
-                            <f:ajax event="action" render="categoryForm"/>
-                        </h:commandLink>
-                    </h:panelGroup>
-                </h:column>
-            </h:dataTable>
-        </h:form>
+                    </h:column>
+                </h:dataTable>
+            </h:form>
+        </h:panelGroup>
     </div>
 </h:body>
 <ui:include src="/WEB-INF/footer.xhtml"/>

@@ -6,10 +6,10 @@ import ru.geekbrains.db.UserCart;
 
 import javax.enterprise.context.SessionScoped;
 import javax.faces.context.FacesContext;
+import javax.faces.event.ComponentSystemEvent;
 import javax.inject.Inject;
 import javax.inject.Named;
 import java.io.Serializable;
-import java.sql.SQLException;
 import java.util.List;
 
 @Named
@@ -22,10 +22,16 @@ public class CatalogController implements Serializable {
     private UserCart userCart;
 
     private Product product;
+    private List<Product> products;
+
     private int defaultValue;
 
-    public List<Product> getAllProducts() throws SQLException {
-        return productRepository.findAll();
+    public void preloadProducts(ComponentSystemEvent componentSystemEvent) {
+        this.products = productRepository.findAll();
+    }
+
+    public List<Product> getAllProducts() {
+        return products;
     }
 
     public Product getProduct() {
@@ -41,15 +47,10 @@ public class CatalogController implements Serializable {
         return "product.xhtml?faces-redirect=true";
     }
 
-    public void addToCart(Product product, String qtyId) {
-        String qty = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get(qtyId);
-        if (qty == null) return;
-        try {
-            int quantity = Integer.parseInt(qty);
-            if (quantity <= 0) return;
-            userCart.add(product.getId(), quantity);
-        } catch (NumberFormatException ignored) {
-        }
+    public void addToCart(Product product, String formId) {
+        Integer quantity = getFormInt(formId);
+        if (quantity == null || quantity <= 0) return;
+        userCart.add(product.getId(), quantity);
     }
 
     public void addToCart(Product product) {
@@ -61,5 +62,15 @@ public class CatalogController implements Serializable {
     }
 
     public void setDefaultValue(int defaultValue) {
+    }
+
+    private Integer getFormInt(String formId) {
+        String value = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get(formId);
+        if (value == null) return null;
+        try {
+            return Integer.parseInt(value);
+        } catch (NumberFormatException ignored) {
+        }
+        return null;
     }
 }

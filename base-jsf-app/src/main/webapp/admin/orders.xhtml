@@ -5,6 +5,7 @@
 <ui:param name="pageTitle" value="Просмотр заказов"/>
 <ui:include src="/WEB-INF/header.xhtml"/>
 <h:body>
+    <f:event listener="${adminController.preloadOrders}" type="preRenderView"/>
     <ui:include src="/WEB-INF/admin_menu.xhtml"/>
     <h1 align="center"><h:outputText value="#{pageTitle}"/></h1>
     <div align="center">
@@ -15,11 +16,14 @@
                     <h:column>
                         <f:facet name="header">Номер заказа</f:facet>
                         <h:commandLink action="#{adminController.showOrder(order)}"
-                                       styleClass="product-link">
+                                       styleClass="product-link" rendered="#{order.count>0}">
                             <h:outputText value="#{order.id}">
                                 <f:convertNumber minIntegerDigits="8" pattern="########"/>
                             </h:outputText>
                         </h:commandLink>
+                        <h:outputText value="#{order.id}" rendered="#{order.count==0}">
+                            <f:convertNumber minIntegerDigits="8" pattern="########"/>
+                        </h:outputText>
                     </h:column>
                     <h:column headerClass="header-right">
                         <f:facet name="header">Количество позиций</f:facet>

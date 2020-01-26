@@ -219,3 +219,8 @@ td.col-id, td.col-price, td.col-qty, td.col-cart, td.col-edit, td.col-sum {
     text-align: left;
     white-space: nowrap;
 }
+
+.valid-message{
+    color: darkred;
+    font-weight: bold;
+}

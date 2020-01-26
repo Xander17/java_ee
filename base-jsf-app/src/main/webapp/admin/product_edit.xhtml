@@ -7,11 +7,12 @@
     <ui:param name="pageTitle" value="Редактирование товара"/>
 </ui:include>
 <h:body>
+    <f:event listener="${adminController.preloadCategories}" type="preRenderView"/>
+    <ui:include src="/WEB-INF/admin_menu.xhtml"/>
     <h1 align="center">
         <h:outputText value="Редактирование товара" rendered="#{adminController.product.id!=null}"/>
         <h:outputText value="Добавление товара" rendered="#{adminController.product.id==null}"/>
     </h1>
-
     <div align="center">
         <h:form id="editForm">
             <table class="productview-table">
@@ -28,7 +29,7 @@
                     <td class="col-value">
                         <h:inputText value="#{adminController.product.name}" id="name"
                                      placeholder="Введите название" required="true"
-                                     requiredMessage="Требуется ввести название" styleClass="product-edit-input"/></td>
+                                     requiredMessage="Введите название" styleClass="product-edit-input"/></td>
                 </tr>
                 <tr>
                     <td class="col-label"><h:outputLabel value="Описание товара" for="description"/></td>
@@ -39,7 +40,8 @@
                 <tr>
                     <td class="col-label"><h:outputLabel value="Категория" for="category"/></td>
                     <td class="col-value">
-                        <h:selectOneMenu value="#{adminController.product.category.id}" id="category" styleClass="product-edit-input">
+                        <h:selectOneMenu value="#{adminController.product.category.id}" id="category"
+                                         styleClass="product-edit-input" required="true" requiredMessage="Выберите категорию">
                             <f:selectItem itemLabel="Выберите категорию"/>
                             <f:selectItems value="#{adminController.getCategories()}" var="cat"
                                            itemLabel="#{cat.name}" itemValue="#{cat.id}"/>
@@ -51,16 +53,16 @@
                     <td class="col-value"><h:inputText p:type="number" value="#{adminController.product.price}"
                                                        id="price"
                                                        placeholder="Введите цену" required="true"
-                                                       requiredMessage="Требуется ввести цену"
+                                                       requiredMessage="Введите цену"
                                                        validatorMessage="Цена должна быть больше нуля"
-                                                       converter="javax.faces.Double" styleClass="product-edit-input">
+                                                       converter="javax.faces.Double" styleClass="product-edit-input" autocomplete="off">
                         <f:validateDoubleRange minimum="0.01"/>
                     </h:inputText>
                     </td>
                 </tr>
             </table>
             <div align="center">
-                <h:messages/>
+                <h:messages styleClass="valid-message"/>
                 <h:commandButton value="Добавить товар" action="#{adminController.saveProduct()}"
                                  rendered="#{adminController.product.id==null}" styleClass="cmd-button"/>
                 <h:commandButton value="Сохранить изменения" action="#{adminController.saveProduct()}"

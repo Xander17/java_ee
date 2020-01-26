@@ -6,6 +6,7 @@
 <ui:include src="/WEB-INF/header.xhtml"/>
 <h:body>
     <ui:include src="/WEB-INF/admin_menu.xhtml"/>
+    <f:event listener="${adminController.preloadOrder}" type="preRenderView"/>
     <h1 align="center"><h:outputText value="#{pageTitle}"/></h1>
     <div align="center">
         <h:form>
@@ -15,67 +16,71 @@
     </div>
     <br/>
     <div align="center">
-        <h:form id="orderForm">
-            <h:dataTable value="#{adminController.getOrderList()}" var="order" styleClass="products-table"
-                         columnClasses="col-id,col-name,col-desc,col-price,col-qty,col-sum,col-edit">
-                <h:column>
-                    <f:facet name="header">Артикул</f:facet>
-                    <h:outputLabel value="#{order.product.id}">
-                        <f:convertNumber minIntegerDigits="8" pattern="########"/>
-                    </h:outputLabel>
-                </h:column>
-                <h:column>
-                    <f:facet name="header">Название</f:facet>
-                    <h:commandLink value="#{order.product.name}"
-                                   action="#{catalogController.showProduct(order.product)}"
-                                   styleClass="product-link"/>
-                </h:column>
-                <h:column>
-                    <f:facet name="header">Описание</f:facet>
-                    #{order.product.description}
-                </h:column>
-                <h:column>
-                    <f:facet name="header">Цена</f:facet>
-                    <h:outputLabel value="#{order.price}">
-                        <f:convertNumber minFractionDigits="2" maxFractionDigits="2"/>
-                    </h:outputLabel>
-                </h:column>
-                <h:column>
-                    <f:facet name="header">Количество</f:facet>
-                    <h:panelGroup styleClass="flex-cell">
-                        <h:inputText p:type="number" required="true" value="#{order.quantity}"
-                                     styleClass="quantity-input"
-                                     name="quantity" id="quantity" converter="javax.faces.Integer"
-                                     autocomplete="off"/>
-                        <h:commandLink
-                                action="#{adminController.updateQuantity(order,component.parent.children.get(0).clientId)}">
-                            <h:graphicImage library="images" name="sync-512.png" styleClass="image-button"/>
-                            <f:ajax event="action" render="orderForm"/>
-                        </h:commandLink>
-                    </h:panelGroup>
-                </h:column>
-                <h:column id="tableSum">
-                    <f:facet name="header">Сумма</f:facet>
-                    <h:outputLabel value="#{order.price*order.quantity}">
-                        <f:convertNumber minFractionDigits="2" maxFractionDigits="2"/>
-                    </h:outputLabel>
-                    <f:facet name="footer">
-                        <h:outputText value="#{adminController.getOrderSum()}" converter="javax.faces.Double">
+        <h:panelGroup id="ordersBlock">
+            <h:form rendered="#{adminController.getItemsCount()>0}">
+                <h:dataTable value="#{adminController.getOrderList()}" var="order" styleClass="products-table"
+                             columnClasses="col-id,col-name,col-desc,col-price,col-qty,col-sum,col-edit">
+                    <h:column>
+                        <f:facet name="header">Артикул</f:facet>
+                        <h:outputLabel value="#{order.product.id}">
+                            <f:convertNumber minIntegerDigits="8" pattern="########"/>
+                        </h:outputLabel>
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">Название</f:facet>
+                        <h:commandLink value="#{order.product.name}"
+                                       action="#{catalogController.showProduct(order.product)}"
+                                       styleClass="product-link"/>
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">Описание</f:facet>
+                        #{order.product.description}
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">Цена</f:facet>
+                        <h:outputLabel value="#{order.price}">
                             <f:convertNumber minFractionDigits="2" maxFractionDigits="2"/>
-                        </h:outputText>
-                    </f:facet>
-                </h:column>
-                <h:column>
-                    <f:facet name="header"/>
-                    <h:panelGroup styleClass="flex-cell">
-                        <h:commandLink action="#{adminController.deleteOrderProduct(order)}">
-                            <h:graphicImage library="images" name="cross-24-512.png" styleClass="image-button"/>
-                            <f:ajax event="action" render="orderForm"/>
-                        </h:commandLink>
-                    </h:panelGroup>
-                </h:column>
-            </h:dataTable>
-        </h:form>
+                        </h:outputLabel>
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">Количество</f:facet>
+                        <h:panelGroup styleClass="flex-cell">
+                            <h:inputText p:type="number" required="true" value="#{order.quantity}"
+                                         styleClass="quantity-input"
+                                         name="quantity" id="quantity" converter="javax.faces.Integer"
+                                         autocomplete="off"/>
+                            <h:commandLink
+                                    action="#{adminController.updateQuantity(order,component.parent.children.get(0).clientId)}">
+                                <h:graphicImage library="images" name="sync-512.png" styleClass="image-button"/>
+                                <f:ajax event="action" render="orderForm"/>
+                            </h:commandLink>
+                        </h:panelGroup>
+                    </h:column>
+                    <h:column id="tableSum">
+                        <f:facet name="header">Сумма</f:facet>
+                        <h:outputLabel value="#{order.price*order.quantity}">
+                            <f:convertNumber minFractionDigits="2" maxFractionDigits="2"/>
+                        </h:outputLabel>
+                        <f:facet name="footer">
+                            <h:outputText value="#{adminController.getOrderSum()}" converter="javax.faces.Double">
+                                <f:convertNumber minFractionDigits="2" maxFractionDigits="2"/>
+                            </h:outputText>
+                        </f:facet>
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header"/>
+                        <h:panelGroup styleClass="flex-cell">
+                            <h:commandLink action="#{adminController.deleteOrderProduct(order)}">
+                                <h:graphicImage library="images" name="cross-24-512.png" styleClass="image-button"/>
+                                <f:ajax event="action" render="ordersBlock"/>
+                            </h:commandLink>
+                        </h:panelGroup>
+                    </h:column>
+                </h:dataTable>
+            </h:form>
+            <h:outputText value="В заказе больше нет позиций. Необходимо удалить заказ"
+                          rendered="#{adminController.getItemsCount()==0}"/>
+        </h:panelGroup>
     </div>
 </h:body>
 <ui:include src="/WEB-INF/footer.xhtml"/>

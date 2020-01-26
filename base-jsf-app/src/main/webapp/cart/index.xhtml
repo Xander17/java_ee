@@ -72,10 +72,10 @@
                     </h:dataTable>
                 </h:form>
 
-            <h:form id="order">
-                <h:commandButton value="Оформить заказ" action="#{cartController.order()}"
-                                 styleClass="cmd-button"/>
-            </h:form>
+                <h:form id="order">
+                    <h:commandButton value="Оформить заказ" action="#{cartController.order()}"
+                                     styleClass="cmd-button"/>
+                </h:form>
             </h:panelGroup>
             <h:panelGroup rendered="#{cartController.getCartSize()==0}">
                 <h:outputText value="Корзина пуста"/>

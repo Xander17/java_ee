@@ -5,6 +5,7 @@
 <ui:param name="pageTitle" value="Редактирование товаров"/>
 <ui:include src="/WEB-INF/header.xhtml"/>
 <h:body>
+    <f:event listener="${adminController.preloadProducts}" type="preRenderView"/>
     <ui:include src="/WEB-INF/admin_menu.xhtml"/>
     <h1 align="center"><h:outputText value="#{pageTitle}"/></h1>
     <div align="center">

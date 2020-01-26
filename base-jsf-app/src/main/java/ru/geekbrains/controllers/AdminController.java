@@ -4,10 +4,10 @@ import ru.geekbrains.db.*;
 
 import javax.enterprise.context.SessionScoped;
 import javax.faces.context.FacesContext;
+import javax.faces.event.ComponentSystemEvent;
 import javax.inject.Inject;
 import javax.inject.Named;
 import java.io.Serializable;
-import java.sql.SQLException;
 import java.util.List;
 
 @Named
@@ -21,12 +21,32 @@ public class AdminController implements Serializable {
     private OrderRepository orderRepository;
 
     private Product product;
+    private Integer categoryEditId;
     private Integer orderEditId;
-    private Order orderEdit;
-    private Integer editId;
 
-    public List<Product> getAllProducts() throws SQLException {
-        return productRepository.findAll();
+    private Order orderEdit;
+    private List<Product> products;
+    private List<Category> categories;
+    private List<OrderLine> orderLines;
+
+    public void preloadProducts(ComponentSystemEvent componentSystemEvent) {
+        this.products = productRepository.findAll();
+    }
+
+    public void preloadCategories(ComponentSystemEvent componentSystemEvent) {
+        this.categories = categoryRepository.findAll();
+    }
+
+    public void preloadOrders(ComponentSystemEvent componentSystemEvent) {
+        this.orderLines = orderRepository.getOrders();
+    }
+
+    public void preloadOrder(ComponentSystemEvent componentSystemEvent) {
+        this.orderEdit = orderRepository.getOrder(orderEditId);
+    }
+
+    public List<Product> getAllProducts() {
+        return products;
     }
 
     public String createProduct() {
@@ -39,11 +59,11 @@ public class AdminController implements Serializable {
         return "product_edit.xhtml?faces-redirect=true";
     }
 
-    public void deleteProduct(Product product) throws SQLException {
-        productRepository.delete(product.getId());
+    public void deleteProduct(Product product) {
+        productRepository.delete(product);
     }
 
-    public String saveProduct() throws SQLException {
+    public String saveProduct() {
         if (product.getId() == null) productRepository.insert(product);
         else productRepository.update(product);
         return "products.xhtml?faces-redirect=true";
@@ -57,66 +77,70 @@ public class AdminController implements Serializable {
         this.product = product;
     }
 
-    public List<Category> getCategories() throws SQLException {
-        return categoryRepository.findAll();
+    public List<Category> getCategories() {
+        return categories;
     }
 
-    public void deleteCategory(Category category) throws SQLException {
-        categoryRepository.delete(category.getId());
+    public void deleteCategory(Category category) {
+        categoryRepository.delete(category);
     }
 
     public void setEditStatus(Category category) {
-        editId = category.getId();
+        categoryEditId = category.getId();
     }
 
-    public void updateCategory(Category category) throws SQLException {
+    public void updateCategory(Category category) {
         String newName = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("category-name");
         if (newName != null && !newName.isEmpty()) {
             category.setName(newName);
             categoryRepository.update(category);
         }
-        editId = null;
+        categoryEditId = null;
     }
 
-    public void addCategory() throws SQLException {
+    public void addCategory() {
         String newName = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("newcategory");
         if (newName != null && !newName.isEmpty()) {
             categoryRepository.insert(new Category(newName));
         }
     }
 
-    public Integer getEditId() {
-        return editId;
+    public Integer getCategoryEditId() {
+        return categoryEditId;
     }
 
-    public void setEditId(Integer editId) {
-        this.editId = editId;
+    public void setCategoryEditId(Integer categoryEditId) {
+        this.categoryEditId = categoryEditId;
     }
 
-    public List<OrderLine> getOrders() throws SQLException {
-        return orderRepository.getOrders();
+    public List<OrderLine> getOrders() {
+        return orderLines;
     }
 
-    public void deleteOrder(OrderLine orderLine) throws SQLException {
-        orderRepository.deleteOrder(orderLine.getId());
+    public void deleteOrder(OrderLine orderLine) {
+        Order order = orderRepository.getOrder(orderLine.getId());
+        orderRepository.deleteOrder(order);
     }
 
-    public String deleteOrder() throws SQLException {
-        orderRepository.deleteOrder(orderEditId);
+    public String deleteOrder() {
+        orderRepository.deleteOrder(orderEdit);
         return "orders.xhtml?faces-redirect=true";
     }
 
-    public String showOrder(OrderLine orderLine) throws SQLException {
+    public String showOrder(OrderLine orderLine) {
         this.orderEditId = orderLine.getId();
         return "order_view.xhtml?faces-redirect=true";
     }
 
-    public List<OrderItem> getOrderList() throws SQLException {
-        orderEdit = orderRepository.getOrder(orderEditId);
+    public List<OrderItem> getOrderList() {
         return orderEdit.getList();
     }
 
-    public int getOrdersCount() throws SQLException {
+    public int getItemsCount() {
+        return orderEdit.getList().size();
+    }
+
+    public int getOrdersCount() {
         return getOrders().size();
     }
 
@@ -128,20 +152,15 @@ public class AdminController implements Serializable {
         return Math.round(sum * 100) / 100.;
     }
 
-    public void deleteOrderProduct(OrderItem orderItem) throws SQLException {
-        orderRepository.deleteProduct(orderEditId, orderItem.getProduct());
+    public void deleteOrderProduct(OrderItem orderItem) {
+        orderRepository.deleteProduct(orderItem);
     }
 
     public void updateQuantity(OrderItem orderItem, String formId) {
-        String qty = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get(formId);
-        if (qty == null) return;
-        try {
-            int quantity = Integer.parseInt(qty);
-            if (quantity < 0) return;
-            orderItem.setQuantity(quantity);
-            orderRepository.update(orderItem, orderEditId);
-        } catch (NumberFormatException | SQLException ignored) {
-        }
+        Integer quantity = getFormInt(formId);
+        if (quantity == null || quantity < 0) return;
+        orderItem.setQuantity(quantity);
+        orderRepository.update(orderItem);
     }
 
     public Order getOrderEdit() {
@@ -150,5 +169,15 @@ public class AdminController implements Serializable {
 
     public void setOrderEdit(Order orderEdit) {
         this.orderEdit = orderEdit;
+    }
+
+    private Integer getFormInt(String formId) {
+        String value = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get(formId);
+        if (value == null) return null;
+        try {
+            return Integer.parseInt(value);
+        } catch (NumberFormatException ignored) {
+        }
+        return null;
     }
 }

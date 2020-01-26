@@ -7,51 +7,53 @@
 <ui:param name="pageTitle" value="Каталог"/>
 <ui:include src="/WEB-INF/header.xhtml"/>
 <h:body>
+    <f:event listener="${catalogController.preloadProducts}" type="preRenderView"/>
     <h1 align="center">#{pageTitle}</h1>
-        <div align="center">
-            <h:form id="catalogForm">
-                <h:dataTable value="#{catalogController.getAllProducts()}" var="product" styleClass="products-table"
-                             columnClasses="col-id,col-category,col-name,col-desc,col-price,col-cart">
-                    <h:column>
-                        <f:facet name="header">Артикул</f:facet>
-                        <h:outputText value="#{product.id}">
-                            <f:convertNumber minIntegerDigits="8" pattern="########"/>
-                        </h:outputText>
-                    </h:column>
-                    <h:column>
-                        <f:facet name="header">Категория</f:facet>
-                        <h:outputText value="#{product.category.name}"/>
-                    </h:column>
-                    <h:column>
-                        <f:facet name="header">Название</f:facet>
-                        <h:commandLink value="#{product.name}" action="#{catalogController.showProduct(product)}"
-                                       styleClass="product-link"/>
-                    </h:column>
-                    <h:column>
-                        <f:facet name="header">Описание</f:facet>
-                        <h:outputText value="#{product.description}"/>
-                    </h:column>
-                    <h:column>
-                        <f:facet name="header">Цена</f:facet>
-                        <h:outputText value="#{product.price}">
-                            <f:convertNumber maxFractionDigits="2" minFractionDigits="2"/>
-                        </h:outputText>
-                    </h:column>
-                    <h:column>
-                        <f:facet name="header">Количество</f:facet>
-                        <h:panelGroup styleClass="flex-cell" id="qty-cell">
-                            <h:inputText p:type="number" value="#{catalogController.defaultValue}" required="true" styleClass="quantity-input"
-                                         name="quantity" id="quantity" autocomplete="off"/>
-                            <h:commandLink
-                                    action="#{catalogController.addToCart(product,component.parent.children.get(0).clientId)}">
-                                <h:graphicImage library="images" name="cart-empty-512.png" styleClass="image-button"/>
-                                <f:ajax event="action" render="cartMenu qty-cell"/>
-                            </h:commandLink>
-                        </h:panelGroup>
-                    </h:column>
-                </h:dataTable>
-            </h:form>
-        </div>
+    <div align="center">
+        <h:form id="catalogForm">
+            <h:dataTable value="#{catalogController.getAllProducts()}" var="product" styleClass="products-table"
+                         columnClasses="col-id,col-category,col-name,col-desc,col-price,col-cart">
+                <h:column>
+                    <f:facet name="header">Артикул</f:facet>
+                    <h:outputText value="#{product.id}">
+                        <f:convertNumber minIntegerDigits="8" pattern="########"/>
+                    </h:outputText>
+                </h:column>
+                <h:column>
+                    <f:facet name="header">Категория</f:facet>
+                    <h:outputText value="#{product.category.name}"/>
+                </h:column>
+                <h:column>
+                    <f:facet name="header">Название</f:facet>
+                    <h:commandLink value="#{product.name}" action="#{catalogController.showProduct(product)}"
+                                   styleClass="product-link"/>
+                </h:column>
+                <h:column>
+                    <f:facet name="header">Описание</f:facet>
+                    <h:outputText value="#{product.description}"/>
+                </h:column>
+                <h:column>
+                    <f:facet name="header">Цена</f:facet>
+                    <h:outputText value="#{product.price}">
+                        <f:convertNumber maxFractionDigits="2" minFractionDigits="2"/>
+                    </h:outputText>
+                </h:column>
+                <h:column>
+                    <f:facet name="header">Количество</f:facet>
+                    <h:panelGroup styleClass="flex-cell" id="qty-cell">
+                        <h:inputText p:type="number" value="#{catalogController.defaultValue}" required="true"
+                                     styleClass="quantity-input"
+                                     name="quantity" id="quantity" autocomplete="off"/>
+                        <h:commandLink
+                                action="#{catalogController.addToCart(product,component.parent.children.get(0).clientId)}">
+                            <h:graphicImage library="images" name="cart-empty-512.png" styleClass="image-button"/>
+                            <f:ajax event="action" render="cartMenu qty-cell"/>
+                        </h:commandLink>
+                    </h:panelGroup>
+                </h:column>
+            </h:dataTable>
+        </h:form>
+    </div>
 </h:body>
 <ui:include src="/WEB-INF/footer.xhtml"/>
 </html>

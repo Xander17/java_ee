@@ -1,28 +1,26 @@
 package ru.geekbrains.db;
 
+import javax.persistence.*;
 import java.util.Objects;
 
+@Entity
+@Table(name = "products")
 public class Product implements Comparable<Product> {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+    @Column(length = 1024, nullable = false)
     private String name;
+    @Column(length = 8096)
     private String description;
-    private Category category;
+    @Column(nullable = false)
     private Double price;
+
+    @ManyToOne
+    private Category category;
 
     public Product() {
         category = new Category();
-    }
-
-    public Product(int id) {
-        this.id = id;
-    }
-
-    public Product(int id, String name, String description, Double price, Category category) {
-        this.id = id;
-        this.name = name;
-        this.description = description;
-        this.price = price;
-        this.category = category;
     }
 
     public Integer getId() {

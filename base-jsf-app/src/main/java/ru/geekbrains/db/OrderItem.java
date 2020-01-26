@@ -1,16 +1,30 @@
 package ru.geekbrains.db;
 
-public class OrderItem {
-    private Product product;
-    private Double price;
-    private Integer quantity;
-    //private Double sum;
+import javax.persistence.*;
 
-    public OrderItem(Product product, Double price, Integer quantity) {
+@Entity
+@Table(name = "order_items")
+public class OrderItem {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
+    @ManyToOne(cascade = CascadeType.REFRESH)
+    private Order order;
+    @ManyToOne
+    private Product product;
+    @Column(nullable = false)
+    private Double price;
+    @Column(nullable = false)
+    private Integer quantity;
+
+    public OrderItem() {
+    }
+
+    public OrderItem(Order order, Product product, Double price, Integer quantity) {
+        this.order = order;
         this.product = product;
         this.price = price;
         this.quantity = quantity;
-        //setSum(null);
     }
 
     public Product getProduct() {
@@ -37,11 +51,19 @@ public class OrderItem {
         this.quantity = quantity;
     }
 
-//    public Double getSum() {
-//        return sum;
-//    }
-//
-//    public void setSum(Double sum) {
-//        this.sum = Math.round(price * quantity * 100) / 100.;
-//    }
+    public Order getOrder() {
+        return order;
+    }
+
+    public void setOrder(Order order) {
+        this.order = order;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
 }

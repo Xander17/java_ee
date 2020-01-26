@@ -1,74 +1,43 @@
 package ru.geekbrains.db;
 
-import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
 import javax.inject.Named;
-import javax.servlet.ServletContext;
-import java.sql.*;
-import java.util.ArrayList;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.transaction.Transactional;
 import java.util.List;
 
 @Named
 @ApplicationScoped
 public class CategoryRepository {
-    private Connection connection;
 
-    @Inject
-    private ServletContext servletContext;
+    @PersistenceContext(unitName = "ds")
+    private EntityManager em;
 
-    @PostConstruct
-    public void init() throws SQLException {
-        this.connection = (Connection) servletContext.getAttribute("connection");
-        DBTables.createTableIfNotExists(connection);
+    @Transactional
+    public void insert(Category category) {
+        em.persist(category);
     }
 
-    public void insert(Category category) throws SQLException {
-        try (PreparedStatement statement = connection.prepareStatement(
-                "insert into categories(`name`) values (?);")) {
-            statement.setString(1, category.getName());
-            statement.execute();
-        }
+    @Transactional
+    public void update(Category category) {
+        em.merge(category);
     }
 
-    public void update(Category category) throws SQLException {
-        try (PreparedStatement statement = connection.prepareStatement(
-                "update categories set `name` = ? where `id` = ?;")) {
-            statement.setString(1, category.getName());
-            statement.setInt(2, category.getId());
-            statement.execute();
-        }
-    }
-
-    public void delete(int id) throws SQLException {
-        try (PreparedStatement statement = connection.prepareStatement(
-                "delete from categories where id = ?;")) {
-            statement.setInt(1, id);
-            statement.execute();
-        }
-    }
-
-    public Category findById(int id) throws SQLException {
-        try (PreparedStatement statement = connection.prepareStatement(
-                "select `name` from `categories` where `id` = ?")) {
-            statement.setInt(1, id);
-            ResultSet rs = statement.executeQuery();
-
-            if (rs.next()) {
-                return new Category(id, rs.getString(1));
+    @Transactional
+    public void delete(Category category) {
+        category=findById(category.getId());
+            for (Product product : category.getProducts()) {
+                product.setCategory(null);
             }
-        }
-        return new Category(-1, null);
+        em.remove(category);
     }
 
-    public List<Category> findAll() throws SQLException {
-        ArrayList<Category> result = new ArrayList<>();
-        try (Statement statement = connection.createStatement()) {
-            ResultSet rs = statement.executeQuery("select `id`, `name` from `categories`");
-            while (rs.next()) {
-                result.add(new Category(rs.getInt(1), rs.getString(2)));
-            }
-        }
-        return result;
+    public Category findById(int id) {
+        return em.find(Category.class, id);
+    }
+
+    public List<Category> findAll() {
+        return em.createQuery("select c from Category c", Category.class).getResultList();
     }
 }
