@@ -8,7 +8,6 @@ import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
 import java.io.Serializable;
-import java.sql.SQLException;
 import java.util.Map;
 
 @Named
@@ -20,7 +19,6 @@ public class CartController implements Serializable {
 
     private Integer lastOrderId;
     private int cartSize;
-
 
     public Map<Product, Integer> getCart() {
         return cart.getCart();
@@ -34,15 +32,10 @@ public class CartController implements Serializable {
         cart.remove(product.getId());
     }
 
-    public void updateQuantity(Product product, String qtyId) {
-        String qty = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get(qtyId);
-        if (qty == null) return;
-        try {
-            int quantity = Integer.parseInt(qty);
-            if (quantity < 0) return;
-            cart.set(product.getId(), quantity);
-        } catch (NumberFormatException ignored) {
-        }
+    public void updateQuantity(Product product, String formId) {
+        Integer quantity = getFormInt(formId);
+        if (quantity == null || quantity < 0) return;
+        cart.set(product.getId(), quantity);
     }
 
     public String order() {
@@ -64,5 +57,15 @@ public class CartController implements Serializable {
 
     public void setLastOrderId(Integer lastOrderId) {
         this.lastOrderId = lastOrderId;
+    }
+
+    private Integer getFormInt(String formId) {
+        String value = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get(formId);
+        if (value == null) return null;
+        try {
+            return Integer.parseInt(value);
+        } catch (NumberFormatException ignored) {
+        }
+        return null;
     }
 }

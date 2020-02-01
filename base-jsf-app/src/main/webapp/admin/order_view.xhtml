@@ -52,7 +52,7 @@
                             <h:commandLink
                                     action="#{adminController.updateQuantity(order,component.parent.children.get(0).clientId)}">
                                 <h:graphicImage library="images" name="sync-512.png" styleClass="image-button"/>
-                                <f:ajax event="action" render="orderForm"/>
+                                <f:ajax event="action" render="ordersBlock"/>
                             </h:commandLink>
                         </h:panelGroup>
                     </h:column>
