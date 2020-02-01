@@ -1,7 +1,7 @@
 package ru.geekbrains.controllers;
 
-import ru.geekbrains.db.Product;
-import ru.geekbrains.db.UserCart;
+import ru.geekbrains.services.UserCartService;
+import ru.geekbrains.services.entities.ProductDAO;
 
 import javax.enterprise.context.SessionScoped;
 import javax.faces.context.FacesContext;
@@ -15,12 +15,12 @@ import java.util.Map;
 public class CartController implements Serializable {
 
     @Inject
-    private UserCart cart;
+    private UserCartService cart;
 
     private Integer lastOrderId;
     private int cartSize;
 
-    public Map<Product, Integer> getCart() {
+    public Map<ProductDAO, Integer> getCart() {
         return cart.getCart();
     }
 
@@ -28,11 +28,11 @@ public class CartController implements Serializable {
         return cart.getCartSize();
     }
 
-    public void deleteProduct(Product product) {
+    public void deleteProduct(ProductDAO product) {
         cart.remove(product.getId());
     }
 
-    public void updateQuantity(Product product, String formId) {
+    public void updateQuantity(ProductDAO product, String formId) {
         Integer quantity = getFormInt(formId);
         if (quantity == null || quantity < 0) return;
         cart.set(product.getId(), quantity);
@@ -45,7 +45,7 @@ public class CartController implements Serializable {
 
     public double getCartSum() {
         double sum = 0;
-        for (Map.Entry<Product, Integer> entry : cart.getCart().entrySet()) {
+        for (Map.Entry<ProductDAO, Integer> entry : cart.getCart().entrySet()) {
             sum += entry.getKey().getPrice() * entry.getValue();
         }
         return Math.round(sum * 100) / 100.;

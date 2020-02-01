@@ -1,26 +1,27 @@
-package ru.geekbrains.db;
+package ru.geekbrains.services.entities;
 
-import javax.persistence.*;
+import ru.geekbrains.repos.entities.Product;
+
 import java.util.Objects;
 
-@Entity
-@Table(name = "products")
-public class Product implements Comparable<Product> {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class ProductDAO implements Comparable<ProductDAO> {
     private Integer id;
-    @Column(length = 1024, nullable = false)
     private String name;
-    @Column(length = 8096)
     private String description;
-    @Column(nullable = false)
     private Double price;
+    private CategoryDAO category;
 
-    @ManyToOne
-    private Category category;
+    public ProductDAO(Product product) {
+        if(product==null) return;
+        this.id = product.getId();
+        this.name = product.getName();
+        this.description = product.getDescription();
+        this.price = product.getPrice();
+        this.category = new CategoryDAO(product.getCategory());
+    }
 
-    public Product() {
-        category = new Category();
+    public ProductDAO() {
+        this.category = new CategoryDAO();
     }
 
     public Integer getId() {
@@ -55,11 +56,11 @@ public class Product implements Comparable<Product> {
         this.price = price;
     }
 
-    public Category getCategory() {
+    public CategoryDAO getCategory() {
         return category;
     }
 
-    public void setCategory(Category category) {
+    public void setCategory(CategoryDAO category) {
         this.category = category;
     }
 
@@ -67,7 +68,7 @@ public class Product implements Comparable<Product> {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Product product = (Product) o;
+        ProductDAO product = (ProductDAO) o;
         return id.intValue() == product.id.intValue();
     }
 
@@ -77,7 +78,7 @@ public class Product implements Comparable<Product> {
     }
 
     @Override
-    public int compareTo(Product o) {
+    public int compareTo(ProductDAO o) {
         return id - o.id;
     }
 }

@@ -1,4 +1,4 @@
-package ru.geekbrains.db;
+package ru.geekbrains.repos.entities;
 
 import javax.persistence.*;
 

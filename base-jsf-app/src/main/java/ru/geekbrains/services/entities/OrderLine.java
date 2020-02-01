@@ -1,4 +1,4 @@
-package ru.geekbrains.db;
+package ru.geekbrains.services.entities;
 
 public class OrderLine {
     private Integer id;

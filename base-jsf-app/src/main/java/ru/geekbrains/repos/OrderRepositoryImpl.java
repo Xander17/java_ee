@@ -1,32 +1,37 @@
-package ru.geekbrains.db;
+package ru.geekbrains.repos;
 
-import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Named;
+import ru.geekbrains.repos.entities.Order;
+import ru.geekbrains.repos.entities.OrderItem;
+import ru.geekbrains.services.entities.OrderLine;
+
+import javax.ejb.Stateless;
+import javax.ejb.TransactionAttribute;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
-@Named
-@ApplicationScoped
-public class OrderRepository {
+@Stateless
+public class OrderRepositoryImpl implements OrderRepository {
 
     @PersistenceContext(unitName = "ds")
     private EntityManager em;
 
-    @Transactional
+    @TransactionAttribute
+    @Override
     public int insert(Order order) {
         em.persist(order);
         return em.createQuery("select max(o.id) from Order o", Integer.class).getResultList().get(0);
     }
 
-    @Transactional
+    @TransactionAttribute
+    @Override
     public void update(OrderItem orderItem) {
         em.merge(orderItem);
     }
 
-    @Transactional
+    @TransactionAttribute
+    @Override
     public void deleteProduct(OrderItem orderItem) {
         Order order = getOrder(orderItem.getOrder().getId());
         orderItem = getOrderItem(orderItem.getId());
@@ -34,20 +39,24 @@ public class OrderRepository {
         em.remove(orderItem);
     }
 
-    @Transactional
+    @TransactionAttribute
+    @Override
     public void deleteOrder(Order order) {
         order = getOrder(order.getId());
         em.remove(order);
     }
 
+    @Override
     public OrderItem getOrderItem(int id) {
         return em.find(OrderItem.class, id);
     }
 
+    @Override
     public Order getOrder(int id) {
         return em.find(Order.class, id);
     }
 
+    @Override
     public List<OrderLine> getOrders() {
         List<Object[]> orders = em.createQuery(
                 "select o.id,count(i.id),sum(i.price*i.quantity) from Order o left join OrderItem i on o.id=i.order.id group by o.id",

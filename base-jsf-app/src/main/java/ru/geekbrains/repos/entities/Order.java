@@ -1,4 +1,4 @@
-package ru.geekbrains.db;
+package ru.geekbrains.repos.entities;
 
 import javax.persistence.*;
 import java.util.List;
@@ -9,14 +9,10 @@ public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<OrderItem> list;
 
     public Order() {
-    }
-
-    public Order(List<OrderItem> list) {
-        this.list=list;
     }
 
     public List<OrderItem> getList() {

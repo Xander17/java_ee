@@ -1,42 +1,48 @@
-package ru.geekbrains.db;
+package ru.geekbrains.repos;
 
-import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Named;
+import ru.geekbrains.repos.entities.Category;
+import ru.geekbrains.repos.entities.Product;
+
+import javax.ejb.Stateless;
+import javax.ejb.TransactionAttribute;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.transaction.Transactional;
 import java.util.List;
 
-@Named
-@ApplicationScoped
-public class CategoryRepository {
+@Stateless
+public class CategoryRepositoryImpl implements CategoryRepository {
 
     @PersistenceContext(unitName = "ds")
     private EntityManager em;
 
-    @Transactional
+    @TransactionAttribute
+    @Override
     public void insert(Category category) {
         em.persist(category);
     }
 
-    @Transactional
+    @TransactionAttribute
+    @Override
     public void update(Category category) {
         em.merge(category);
     }
 
-    @Transactional
+    @TransactionAttribute
+    @Override
     public void delete(Category category) {
-        category=findById(category.getId());
-            for (Product product : category.getProducts()) {
-                product.setCategory(null);
-            }
+        category = findById(category.getId());
+        for (Product product : category.getProducts()) {
+            product.setCategory(null);
+        }
         em.remove(category);
     }
 
+    @Override
     public Category findById(int id) {
         return em.find(Category.class, id);
     }
 
+    @Override
     public List<Category> findAll() {
         return em.createQuery("select c from Category c", Category.class).getResultList();
     }

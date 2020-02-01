@@ -1,4 +1,4 @@
-package ru.geekbrains.db;
+package ru.geekbrains.repos.entities;
 
 import javax.persistence.*;
 import java.util.List;
@@ -11,14 +11,10 @@ public class Category {
     private Integer id;
     @Column(length = 1024, nullable = false)
     private String name;
-    @OneToMany(mappedBy = "category",cascade = CascadeType.PERSIST)
+    @OneToMany(mappedBy = "category", cascade = CascadeType.PERSIST)
     private List<Product> products;
 
     public Category() {
-    }
-
-    public Category(String name) {
-        this.name = name;
     }
 
     public String getName() {

@@ -1,18 +1,25 @@
-package ru.geekbrains.db;
+package ru.geekbrains.services;
+
+import ru.geekbrains.repos.OrderRepository;
+import ru.geekbrains.repos.ProductRepository;
+import ru.geekbrains.repos.entities.Order;
+import ru.geekbrains.repos.entities.OrderItem;
+import ru.geekbrains.repos.entities.Product;
+import ru.geekbrains.services.entities.ProductDAO;
 
 import javax.annotation.PostConstruct;
+import javax.ejb.EJB;
 import javax.enterprise.context.SessionScoped;
-import javax.inject.Inject;
 import javax.inject.Named;
 import java.io.Serializable;
 import java.util.*;
 
 @Named
 @SessionScoped
-public class UserCart implements Serializable {
-    @Inject
+public class UserCartService implements Serializable {
+    @EJB
     private ProductRepository productRepository;
-    @Inject
+    @EJB
     private OrderRepository orderRepository;
 
     private HashMap<Integer, Integer> cart;
@@ -36,10 +43,10 @@ public class UserCart implements Serializable {
         cart.remove(id);
     }
 
-    public Map<Product, Integer> getCart() {
-        Map<Product, Integer> productCart = new TreeMap<>();
+    public Map<ProductDAO, Integer> getCart() {
+        Map<ProductDAO, Integer> productCart = new TreeMap<>();
         for (Map.Entry<Integer, Integer> entry : cart.entrySet()) {
-            Product product = productRepository.findById(entry.getKey());
+            ProductDAO product = new ProductDAO(productRepository.findById(entry.getKey()));
             if (product.getId() >= 0) productCart.put(product, entry.getValue());
         }
         return productCart;

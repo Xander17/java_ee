@@ -1,11 +1,14 @@
 package ru.geekbrains.controllers;
 
-import ru.geekbrains.db.*;
+import ru.geekbrains.services.CatalogService;
+import ru.geekbrains.services.CategoryService;
+import ru.geekbrains.services.OrderService;
+import ru.geekbrains.services.entities.*;
 
+import javax.ejb.EJB;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ComponentSystemEvent;
-import javax.inject.Inject;
 import javax.inject.Named;
 import java.io.Serializable;
 import java.util.List;
@@ -13,87 +16,87 @@ import java.util.List;
 @Named
 @SessionScoped
 public class AdminController implements Serializable {
-    @Inject
-    private ProductRepository productRepository;
-    @Inject
-    private CategoryRepository categoryRepository;
-    @Inject
-    private OrderRepository orderRepository;
+    @EJB
+    private CatalogService catalogService;
+    @EJB
+    private OrderService orderService;
+    @EJB
+    private CategoryService categoryService;
 
-    private Product product;
+    private ProductDAO product;
     private Integer categoryEditId;
     private Integer orderEditId;
 
-    private Order orderEdit;
-    private List<Product> products;
-    private List<Category> categories;
+    private OrderDAO orderEdit;
+    private List<ProductDAO> products;
+    private List<CategoryDAO> categories;
     private List<OrderLine> orderLines;
 
     public void preloadProducts(ComponentSystemEvent componentSystemEvent) {
-        this.products = productRepository.findAll();
+        this.products = catalogService.findAll();
     }
 
     public void preloadCategories(ComponentSystemEvent componentSystemEvent) {
-        this.categories = categoryRepository.findAll();
+        this.categories = categoryService.findAll();
     }
 
     public void preloadOrders(ComponentSystemEvent componentSystemEvent) {
-        this.orderLines = orderRepository.getOrders();
+        this.orderLines = orderService.getOrders();
     }
 
     public void preloadOrder(ComponentSystemEvent componentSystemEvent) {
-        this.orderEdit = orderRepository.getOrder(orderEditId);
+        this.orderEdit = orderService.getOrder(orderEditId);
     }
 
-    public List<Product> getAllProducts() {
+    public List<ProductDAO> getAllProducts() {
         return products;
     }
 
     public String createProduct() {
-        this.product = new Product();
+        this.product = new ProductDAO();
         return "product_edit.xhtml?faces-redirect=true";
     }
 
-    public String editProduct(Product product) {
+    public String editProduct(ProductDAO product) {
         this.product = product;
         return "product_edit.xhtml?faces-redirect=true";
     }
 
-    public void deleteProduct(Product product) {
-        productRepository.delete(product);
+    public void deleteProduct(ProductDAO product) {
+        catalogService.delete(product);
     }
 
     public String saveProduct() {
-        if (product.getId() == null) productRepository.insert(product);
-        else productRepository.update(product);
+        if (product.getId() == null) catalogService.insert(product);
+        else catalogService.update(product);
         return "products.xhtml?faces-redirect=true";
     }
 
-    public Product getProduct() {
+    public ProductDAO getProduct() {
         return product;
     }
 
-    public void setProduct(Product product) {
+    public void setProduct(ProductDAO product) {
         this.product = product;
     }
 
-    public List<Category> getCategories() {
+    public List<CategoryDAO> getCategories() {
         return categories;
     }
 
-    public void deleteCategory(Category category) {
-        categoryRepository.delete(category);
+    public void deleteCategory(CategoryDAO category) {
+        categoryService.delete(category);
     }
 
-    public void setEditStatus(Category category) {
+    public void setEditStatus(CategoryDAO category) {
         categoryEditId = category.getId();
     }
 
-    public void updateCategory(Category category) {
+    public void updateCategory(CategoryDAO category) {
         String newName = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("category-name");
         if (newName != null && !newName.isEmpty()) {
             category.setName(newName);
-            categoryRepository.update(category);
+            categoryService.update(category);
         }
         categoryEditId = null;
     }
@@ -101,7 +104,7 @@ public class AdminController implements Serializable {
     public void addCategory() {
         String newName = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("newcategory");
         if (newName != null && !newName.isEmpty()) {
-            categoryRepository.insert(new Category(newName));
+            categoryService.insert(new CategoryDAO(newName));
         }
     }
 
@@ -118,12 +121,12 @@ public class AdminController implements Serializable {
     }
 
     public void deleteOrder(OrderLine orderLine) {
-        Order order = orderRepository.getOrder(orderLine.getId());
-        orderRepository.deleteOrder(order);
+        OrderDAO order = orderService.getOrder(orderLine.getId());
+        orderService.deleteOrder(order);
     }
 
     public String deleteOrder() {
-        orderRepository.deleteOrder(orderEdit);
+        orderService.deleteOrder(orderEdit);
         return "orders.xhtml?faces-redirect=true";
     }
 
@@ -132,7 +135,7 @@ public class AdminController implements Serializable {
         return "order_view.xhtml?faces-redirect=true";
     }
 
-    public List<OrderItem> getOrderList() {
+    public List<OrderItemDAO> getOrderList() {
         return orderEdit.getList();
     }
 
@@ -146,28 +149,28 @@ public class AdminController implements Serializable {
 
     public Double getOrderSum() {
         double sum = 0;
-        for (OrderItem item : orderEdit.getList()) {
+        for (OrderItemDAO item : orderEdit.getList()) {
             sum += item.getPrice() * item.getQuantity();
         }
         return Math.round(sum * 100) / 100.;
     }
 
-    public void deleteOrderProduct(OrderItem orderItem) {
-        orderRepository.deleteProduct(orderItem);
+    public void deleteOrderProduct(OrderItemDAO orderItem) {
+        orderService.deleteProduct(orderItem);
     }
 
-    public void updateQuantity(OrderItem orderItem, String formId) {
+    public void updateQuantity(OrderItemDAO orderItem, String formId) {
         Integer quantity = getFormInt(formId);
         if (quantity == null || quantity < 0) return;
         orderItem.setQuantity(quantity);
-        orderRepository.update(orderItem);
+        orderService.update(orderItem);
     }
 
-    public Order getOrderEdit() {
+    public OrderDAO getOrderEdit() {
         return orderEdit;
     }
 
-    public void setOrderEdit(Order orderEdit) {
+    public void setOrderEdit(OrderDAO orderEdit) {
         this.orderEdit = orderEdit;
     }
 
