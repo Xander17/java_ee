@@ -1,6 +1,7 @@
 package ru.geekbrains.repos;
 
 import ru.geekbrains.repos.entities.Category;
+import ru.geekbrains.repos.entities.Product;
 
 import javax.ejb.Local;
 import java.util.List;
@@ -16,4 +17,6 @@ public interface CategoryRepository {
     Category findById(int id);
 
     List<Category> findAll();
+
+    List<Product> getProductsByCategory(int id);
 }
