@@ -1,15 +1,19 @@
 package ru.geekbrains.repos;
 
 import ru.geekbrains.repos.entities.Product;
+import ru.geekbrains.rest.ProductServiceRS;
+import ru.geekbrains.soap.ProductRepositoryWS;
 
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
+import javax.jws.WebService;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.util.List;
 
 @Stateless
-public class ProductRepositoryImpl implements ProductRepository {
+@WebService(endpointInterface = "ru.geekbrains.soap.ProductRepositoryWS", serviceName = "ProductService")
+public class ProductRepositoryImpl implements ProductRepository, ProductRepositoryWS, ProductServiceRS {
 
     @PersistenceContext(unitName = "ds")
     private EntityManager em;
