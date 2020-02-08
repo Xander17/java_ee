@@ -9,7 +9,7 @@ public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
     private List<OrderItem> list;
 
     public Order() {
