@@ -1,0 +1,33 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets" xmlns:p="http://xmlns.jcp.org/jsf/passthrough"
+>
+<ui:include src="/WEB-INF/header.xhtml">
+    <ui:param name="pageTitle" value="Авторизация"/>
+</ui:include>
+<h:body>
+    <h1 align="center">#{pageTitle}</h1>
+    <div align="center">
+        <form action="j_security_check" id="editForm">
+            <table class="login-table">
+                <tr>
+                    <td class="col-label"><h:outputLabel value="Логин" for="j_username"/></td>
+                    <td class="col-value"><h:inputText styleClass="form-control" id="j_username" name="j_username"
+                                                       placeholder="Введите логин"
+                                                       value="#{userController.loggedUser.login}" required="true"
+                                                       requiredMessage="Login is required"/></td>
+                </tr>
+                <tr>
+                    <td class="col-label"><h:outputLabel value="Пароль" for="j_password"/></td>
+                    <td class="col-value"><h:inputText p:type="password" styleClass="form-control" id="j_password"
+                                                       name="j_password"
+                                                       placeholder="Введите пароль"
+                                                       value="#{userController.loggedUser.pass}"/></td>
+                </tr>
+            </table>
+            <button formmethod="post" class="cmd-button">Вход</button>
+        </form>
+    </div>
+</h:body>
+<ui:include src="/WEB-INF/footer.xhtml"/>
+</html>

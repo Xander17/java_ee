@@ -76,6 +76,11 @@ td.col-id, td.col-price, td.col-qty, td.col-cart, td.col-edit, td.col-sum {
     border-spacing: 0;
 }
 
+.login-table{
+    width: 20%;
+    border-spacing: 0;
+}
+
 .col-label, .col-value {
     width: 50%;
 }
