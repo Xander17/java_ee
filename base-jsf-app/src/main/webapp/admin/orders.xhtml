@@ -1,0 +1,51 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+<ui:param name="pageTitle" value="Просмотр заказов"/>
+<ui:include src="/WEB-INF/header.xhtml"/>
+<h:body>
+    <f:event listener="${adminController.preloadOrders}" type="preRenderView"/>
+    <ui:include src="/WEB-INF/admin_menu.xhtml"/>
+    <h1 align="center"><h:outputText value="#{pageTitle}"/></h1>
+    <div align="center">
+        <h:panelGroup id="ordersBlock">
+            <h:form id="ordersForm" rendered="#{adminController.getOrdersCount()>0}">
+                <h:dataTable value="#{adminController.getOrders()}" var="order" styleClass="orders-table"
+                             columnClasses="col-id,col-order-qty,col-sum,col-edit">
+                    <h:column>
+                        <f:facet name="header">Номер заказа</f:facet>
+                        <h:commandLink action="#{adminController.showOrder(order)}"
+                                       styleClass="product-link" rendered="#{order.count>0}">
+                            <h:outputText value="#{order.id}">
+                                <f:convertNumber minIntegerDigits="8" pattern="########"/>
+                            </h:outputText>
+                        </h:commandLink>
+                        <h:outputText value="#{order.id}" rendered="#{order.count==0}">
+                            <f:convertNumber minIntegerDigits="8" pattern="########"/>
+                        </h:outputText>
+                    </h:column>
+                    <h:column headerClass="header-right">
+                        <f:facet name="header">Количество позиций</f:facet>
+                        <h:outputText value="#{order.count}"/>
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">Сумма</f:facet>
+                        <h:outputText value="#{order.sum}"/>
+                    </h:column>
+                    <h:column>
+                        <h:commandLink action="#{adminController.deleteOrder(order)}">
+                            <h:graphicImage library="images" name="cross-24-512.png" styleClass="image-button"/>
+                            <f:ajax event="action" render="ordersBlock"/>
+                        </h:commandLink>
+                    </h:column>
+                </h:dataTable>
+            </h:form>
+            <h:panelGroup rendered="#{adminController.getOrdersCount()==0}">
+                <h:outputText value="Заказов нет"/>
+            </h:panelGroup>
+        </h:panelGroup>
+    </div>
+</h:body>
+<ui:include src="/WEB-INF/footer.xhtml"/>
+</html>

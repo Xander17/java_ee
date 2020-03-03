@@ -1,0 +1,64 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+<ui:param name="pageTitle" value="Редактирование товаров"/>
+<ui:include src="/WEB-INF/header.xhtml"/>
+<h:body>
+    <f:event listener="${adminController.preloadProducts}" type="preRenderView"/>
+    <ui:include src="/WEB-INF/admin_menu.xhtml"/>
+    <h1 align="center"><h:outputText value="#{pageTitle}"/></h1>
+    <div align="center">
+        <h:form>
+            <h:commandButton value="Добавить товар" action="#{adminController.createProduct()}"
+                             styleClass="cmd-button"/>
+        </h:form>
+    </div>
+    <br/>
+    <div align="center">
+        <h:form id="catalogForm">
+            <h:dataTable value="#{adminController.getAllProducts()}" var="product" styleClass="products-table"
+                         columnClasses="col-id,col-category,col-name,col-desc,col-price,col-edit">
+                <h:column>
+                    <f:facet name="header">Артикул</f:facet>
+                    <h:outputText value="#{product.id}">
+                        <f:convertNumber minIntegerDigits="8" pattern="########"/>
+                    </h:outputText>
+                </h:column>
+                <h:column>
+                    <f:facet name="header">Категория</f:facet>
+                    <h:outputText value="#{product.category.name}"/>
+                </h:column>
+                <h:column>
+                    <f:facet name="header">Название</f:facet>
+                    <h:commandLink value="#{product.name}" action="#{catalogController.showProduct(product)}"
+                                   styleClass="product-link"/>
+                </h:column>
+                <h:column>
+                    <f:facet name="header">Описание</f:facet>
+                    <h:outputText value="#{product.description}"/>
+                </h:column>
+                <h:column>
+                    <f:facet name="header">Цена</f:facet>
+                    <h:outputText value="#{product.price}">
+                        <f:convertNumber maxFractionDigits="2" minFractionDigits="2"/>
+                    </h:outputText>
+                </h:column>
+                <h:column>
+                    <f:facet name="header"/>
+                    <h:panelGroup styleClass="flex-cell">
+                        <h:commandLink action="#{adminController.editProduct(product)}">
+                            <h:graphicImage library="images" name="write-512.png" styleClass="image-button"/>
+                        </h:commandLink>
+                        <h:commandLink action="#{adminController.deleteProduct(product)}">
+                            <h:graphicImage library="images" name="cross-24-512.png" styleClass="image-button"/>
+                            <f:ajax event="action" render="catalogForm"/>
+                        </h:commandLink>
+                    </h:panelGroup>
+                </h:column>
+            </h:dataTable>
+        </h:form>
+    </div>
+</h:body>
+<ui:include src="/WEB-INF/footer.xhtml"/>
+</html>
