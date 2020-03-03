@@ -2,16 +2,20 @@ package ru.geekbrains.repos;
 
 import ru.geekbrains.repos.entities.Category;
 import ru.geekbrains.repos.entities.Product;
+import ru.geekbrains.rest.CategoryServiceRS;
+import ru.geekbrains.soap.CategoryRepositoryWS;
 
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
+import javax.jws.WebService;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import java.util.List;
 
 @Stateless
-public class CategoryRepositoryImpl implements CategoryRepository {
+@WebService(endpointInterface = "ru.geekbrains.soap.CategoryRepositoryWS", serviceName = "CategoryService")
+public class CategoryRepositoryImpl implements CategoryRepository, CategoryRepositoryWS, CategoryServiceRS {
 
     @PersistenceContext(unitName = "ds")
     private EntityManager em;

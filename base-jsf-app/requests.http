@@ -1,0 +1,45 @@
+GET http://localhost:8080/base-jsf-app/api/products/all
+
+###
+
+GET http://localhost:8080/base-jsf-app/api/products/11/id
+
+###
+
+DELETE http://localhost:8080/base-jsf-app/api/products/delete
+Content-Type: application/json
+
+{
+"id":18
+}
+
+###
+
+PUT http://localhost:8080/base-jsf-app/api/products/new
+Content-Type: application/json
+
+{
+  "name": "REST name",
+  "description": "REST desc",
+  "price": 666,
+  "category": {"id": 7}
+}
+
+###
+
+POST http://localhost:8080/base-jsf-app/api/products/update
+Content-Type: application/json
+
+{
+  "id": 24,
+  "name": "REST name changed",
+  "description": "REST desc changed",
+  "price": 777,
+  "category": {"id": 12}
+}
+
+###
+
+GET http://localhost:8080/base-jsf-app/api/categories/all
+
+###
