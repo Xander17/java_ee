@@ -3,7 +3,9 @@ package ru.geekbrains.services;
 import ru.geekbrains.loggers.AppLogger;
 import ru.geekbrains.repos.CategoryRepository;
 import ru.geekbrains.repos.entities.Category;
+import ru.geekbrains.repos.entities.Product;
 import ru.geekbrains.services.entities.CategoryDAO;
+import ru.geekbrains.services.entities.ProductDAO;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -53,5 +55,12 @@ public class CategoryServiceImpl implements CategoryService {
         category.setId(categoryDAO.getId());
         category.setName(categoryDAO.getName());
         return category;
+    }
+
+    public List<ProductDAO> getProductsByCategory(int id) {
+        List<Product> productList = categoryRepository.getProductsByCategory(id);
+        List<ProductDAO> daoList = new ArrayList<>();
+        productList.forEach(product -> daoList.add(new ProductDAO(product)));
+        return daoList;
     }
 }

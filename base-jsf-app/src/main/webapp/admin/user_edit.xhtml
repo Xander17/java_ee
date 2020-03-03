@@ -1,0 +1,64 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+>
+<ui:include src="/WEB-INF/header.xhtml">
+    <ui:param name="pageTitle" value="Редактирование пользователя"/>
+</ui:include>
+<h:body>
+    <f:event listener="${roleController.preloadRoles}" type="preRenderView"/>
+    <ui:include src="/WEB-INF/admin_menu.xhtml"/>
+    <h1 align="center">
+        <h:outputText value="Редактирование пользователя" rendered="#{userController.user.id!=null}"/>
+        <h:outputText value="Добавление пользователя" rendered="#{userController.user.id==null}"/>
+    </h1>
+    <div align="center">
+        <h:form id="editForm">
+            <table class="productview-table">
+                <ui:fragment rendered="#{userController.user.id!=null}">
+                    <tr>
+                        <td class="col-label"><h:outputLabel value="ID" for="id"/></td>
+                        <td class="col-value"><h:outputText id="id" value="#{userController.user.id}">
+                            <f:convertNumber minIntegerDigits="8" pattern="########"/>
+                        </h:outputText></td>
+                    </tr>
+                </ui:fragment>
+                <tr>
+                    <td class="col-label"><h:outputLabel value="Логин" for="name"/></td>
+                    <td class="col-value">
+                        <h:inputText value="#{userController.user.login}" id="name"
+                                     placeholder="Введите логин" required="true"
+                                     requiredMessage="Введите логин" styleClass="product-edit-input"/></td>
+                </tr>
+                <tr>
+                    <td class="col-label"><h:outputLabel value="Пароль" for="description"/></td>
+                    <td class="col-value">
+                        <h:inputText value="#{userController.user.pass}" id="description"
+                                     placeholder="Введите пароль" styleClass="product-edit-input"/></td>
+                </tr>
+                <tr>
+                    <td class="col-label"><h:outputLabel value="Роль" for="category"/></td>
+                    <td class="col-value">
+                        <h:selectOneMenu value="#{userController.user.role.id}" id="category"
+                                         styleClass="product-edit-input" required="true"
+                                         requiredMessage="Выберите роль">
+                            <f:selectItem itemLabel="Выберите роль"/>
+                            <f:selectItems value="#{roleController.getRoles()}" var="role"
+                                           itemLabel="#{role.name}" itemValue="#{role.id}"/>
+                        </h:selectOneMenu>
+                    </td>
+                </tr>
+            </table>
+            <div align="center">
+                <h:messages styleClass="valid-message"/>
+                <h:commandButton value="Добавить пользователя" action="#{userController.saveUser()}"
+                                 rendered="#{userController.user.id==null}" styleClass="cmd-button"/>
+                <h:commandButton value="Сохранить изменения" action="#{userController.saveUser()}"
+                                 rendered="#{userController.user.id!=null}" styleClass="cmd-button"/>
+            </div>
+        </h:form>
+    </div>
+</h:body>
+<ui:include src="/WEB-INF/footer.xhtml"/>
+</html>
